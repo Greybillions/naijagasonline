@@ -20,8 +20,8 @@ const Header = () => {
           <Image
             src={images.logoWord}
             alt='NaijaGasOnline'
-            width={160}
-            height={160}
+            width={200}
+            height={200}
             className='object-contain'
           />
         </Link>

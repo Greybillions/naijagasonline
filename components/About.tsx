@@ -28,7 +28,7 @@ const About = () => {
         className='max-w-6xl mx-auto flex flex-col items-center text-center'
       >
         <h1 className='text-4xl md:text-5xl font-bold text-gray-900 mb-6'>
-          What <span className='text-orange-500'>We Do</span>
+          About <span className='text-orange-500'>Us</span>
         </h1>
         <p className='text-lg text-gray-700 max-w-3xl mb-12'>
           At NaijaGas Online, we do more than deliver gas — we connect, inform,

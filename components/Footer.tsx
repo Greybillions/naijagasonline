@@ -9,6 +9,8 @@ import {
   FaInstagram,
   FaTwitter,
 } from 'react-icons/fa';
+import Image from 'next/image';
+import { images } from '@/constants/images';
 
 const iconMap: Record<string, JSX.Element> = {
   facebook: <FaFacebookF />,
@@ -78,7 +80,13 @@ const Footer = () => {
         <div className='max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 text-sm text-gray-400'>
           {/* Catalog */}
           <div>
-            <h4 className='text-white font-semibold mb-3'>Catalog</h4>
+            <Image
+              src={images.logoWordDark}
+              alt='Logo'
+              width={150}
+              height={150}
+              className='mb-3 object-contain self-start'
+            />
             <p>
               Seamless transactions, personalized insights, and smarter
               solutions.
@@ -107,7 +115,7 @@ const Footer = () => {
 
       {/* Bottom bar */}
       <div className='mt-10 border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500'>
-        <p>Copyright © 2025 Catalog All Rights Reserved.</p>
+        <p>Copyright © 2025 NaijaGasOnline All Rights Reserved.</p>
         <a href='#' className='underline mt-2 md:mt-0'>
           Privacy Policy
         </a>
