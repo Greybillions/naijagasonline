@@ -32,19 +32,18 @@ const ProductCard = ({
   return (
     <div
       className={clsx(
-        'md:w-full w-[300px] mx-auto h-auto p-4 rounded-2xl shadow-md border border-gray-200 bg-white md:h-full',
+        'w-full h-full p-4 flex flex-col justify-between rounded-2xl shadow-md border border-gray-200 bg-white',
         className
       )}
     >
       {/* Product Image */}
-      <div className='relative md:w-full mb-4 rounded-lg overflow-hidden'>
-        <Link href={`/product/${title}`}>
+      <div className='relative w-full aspect-square mb-4 rounded-lg overflow-hidden flex justify-center items-center'>
+        <Link href={`/product/${title}`} className='w-full h-full'>
           <Image
             src={image}
             alt={title}
-            width={300}
-            height={200}
-            className='w-full md:w-[300px] md:h-[300px] object-contain rounded-md'
+            fill
+            className='object-contain rounded-md'
           />
         </Link>
 
@@ -60,11 +59,13 @@ const ProductCard = ({
         </button>
       </div>
 
+      {/* Product Info */}
       <h3 className='text-base sm:text-lg font-semibold text-gray-800'>
         {title}
       </h3>
       <p className='text-sm text-gray-500 truncate'>{subtitle}</p>
 
+      {/* Rating */}
       <div className='flex items-center mt-1 space-x-1 text-sm'>
         <span className='text-orange-500 font-semibold'>{rating}</span>
         <span className='text-orange-500'>
@@ -73,16 +74,17 @@ const ProductCard = ({
         </span>
       </div>
 
-      <div className='mt-4 flex items-center justify-between'>
+      {/* Price and Button */}
+      <div className='mt-auto pt-4 flex items-center justify-between'>
         <span className='text-sm sm:text-base font-semibold text-gray-900'>
           ${price.toFixed(2)}
         </span>
         <Button
           onClick={onBuy}
           variant='primary'
-          className='px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium'
+          className='px-3 py-1 rounded-full text-xs sm:text-sm font-medium'
         >
-          Add to Cart
+          Buy now
         </Button>
       </div>
     </div>

@@ -4,7 +4,6 @@ import { products } from '@/constants';
 import React from 'react';
 import ProductCard from './ProductCard';
 import Button from './Button';
-import Feature from './Feature';
 import { motion } from 'framer-motion';
 
 const fadeUp = {
@@ -37,8 +36,8 @@ const Products = () => {
           Popular Products
         </motion.h1>
 
-        {/* Responsive Product Grid */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 w-full mt-10'>
+        {/* Product Grid */}
+        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mt-10 w-full'>
           {products.map((product, index) => (
             <motion.div
               key={product.id}
@@ -47,7 +46,7 @@ const Products = () => {
               whileInView='visible'
               viewport={{ once: true }}
               variants={fadeUp}
-              className='w-full'
+              className='w-full h-full'
             >
               <ProductCard
                 title={product.title}
@@ -55,6 +54,7 @@ const Products = () => {
                 price={product.price}
                 rating={product.rating}
                 image={product.image}
+                className='w-full h-full'
               />
             </motion.div>
           ))}
@@ -75,11 +75,6 @@ const Products = () => {
             See More
           </Button>
         </motion.div>
-      </div>
-
-      {/* Feature Section Below */}
-      <div className='w-full mt-16'>
-        <Feature />
       </div>
     </section>
   );

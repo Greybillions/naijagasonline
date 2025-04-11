@@ -81,7 +81,7 @@ const Footer = () => {
           {/* Catalog */}
           <div>
             <Image
-              src={images.logoWordDark}
+              src={images.logo}
               alt='Logo'
               width={150}
               height={150}

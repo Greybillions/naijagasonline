@@ -18,7 +18,7 @@ const Header = () => {
         {/* Logo */}
         <Link href='/' className='flex items-center'>
           <Image
-            src={images.logoWord}
+            src={images.logo}
             alt='NaijaGasOnline'
             width={200}
             height={200}
