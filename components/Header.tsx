@@ -5,9 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { images } from '@/constants/images';
 import { link } from '@/constants';
-import { CiSearch, CiUser } from 'react-icons/ci';
+import { CiUser } from 'react-icons/ci';
 import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
-import Button from './Button';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,13 +40,6 @@ const Header = () => {
 
         {/* Right side actions */}
         <div className='flex items-center gap-2 sm:gap-4'>
-          <Button
-            variant='ghost'
-            className='p-2 sm:px-4 sm:py-2 text-base flex items-center gap-2 hover:bg-[#e6e9f2] rounded-xl'
-          >
-            <CiSearch className='text-xl text-gray-500' />
-          </Button>
-
           <Link
             href='/login'
             className='p-2 sm:px-4 sm:py-2 text-base flex items-center gap-2 hover:bg-[#e6e9f2] rounded-xl'

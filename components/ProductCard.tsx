@@ -75,9 +75,9 @@ const ProductCard = ({
       </div>
 
       {/* Price and Button */}
-      <div className='mt-auto pt-4 flex items-center justify-between'>
+      <div className='mt-auto pt-4 flex flex-col md:flex-row gap-2 items-center justify-between'>
         <span className='text-sm sm:text-base font-semibold text-gray-900'>
-          ${price.toFixed(2)}
+          ₦{price.toFixed(2)}
         </span>
         <Button
           onClick={onBuy}

@@ -1,12 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Image from 'next/image';
 import { images } from '@/constants/images';
 import Button from './Button';
-import { MdOutlineArrowRightAlt } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 const container = {
   hidden: {},
@@ -23,6 +23,8 @@ const item = {
 };
 
 const Hero = () => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <section className='relative flex flex-col min-h-screen w-full overflow-hidden bg-white'>
       <Header />
@@ -41,14 +43,14 @@ const Hero = () => {
               variants={item}
               className='text-lg sm:text-xl text-[#ea580c]'
             >
-              Exclusive Deal 40% off
+              Welcome to NaijaGas Online
             </motion.p>
 
             <motion.h1
               variants={item}
               className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 leading-tight'
             >
-              Fast & Reliable Gas Delivery, Right to Your Doorstep
+              Your Smart Choice for Cooking Gas
             </motion.h1>
 
             <motion.div
@@ -57,18 +59,10 @@ const Hero = () => {
             >
               <Button
                 variant='primary'
-                url='/shop'
+                onClick={() => setShowModal(true)}
                 className='hover:scale-102 w-full sm:w-auto'
               >
-                Order Now
-              </Button>
-              <Button
-                variant='ghost'
-                url='/shop'
-                className='hover:translate-x-1 w-full sm:w-auto'
-              >
-                Learn More
-                <MdOutlineArrowRightAlt className='text-2xl ml-2 transition-all' />
+                How do we help you?
               </Button>
             </motion.div>
           </div>
@@ -88,6 +82,43 @@ const Hero = () => {
           </motion.div>
         </div>
       </motion.div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className='fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50'>
+          <div className='bg-white rounded-xl p-6 w-[90%] max-w-md shadow-lg space-y-4 text-center'>
+            <h2 className='text-lg font-semibold text-gray-800'>
+              How can we help you?
+            </h2>
+            <div className='space-y-3'>
+              <Link
+                href='/shop'
+                className='block w-full rounded-md bg-orange-500 text-white py-2'
+              >
+                Buy Gas Online
+              </Link>
+              <Link
+                href='/service'
+                className='block w-full rounded-md bg-orange-500 text-white py-2'
+              >
+                Get a Service
+              </Link>
+              <Link
+                href='/login'
+                className='block w-full rounded-md bg-orange-500 text-white py-2'
+              >
+                Join Us
+              </Link>
+            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              className='text-sm text-gray-500 hover:underline mt-4'
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
