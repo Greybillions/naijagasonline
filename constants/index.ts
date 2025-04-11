@@ -111,6 +111,15 @@ export const featuredProducts = [
     image: '/product/truck1.jpeg',
     onBuy: () => alert('Product 3 added to cart'),
   },
+  {
+    id: 4,
+    title: 'War Ship',
+    subtitle: 'Portable and Lightweight',
+    price: 24949.99,
+    rating: 4.5,
+    image: '/product/ship2.jpeg',
+    onBuy: () => alert('Product 4 added to cart'),
+  },
 ];
 
 export const servicePoints = [
@@ -134,4 +143,25 @@ export const servicePoints = [
     description:
       'We sell oil and gas products from within Nigeria to Nigerians and to the world at large.',
   },
+];
+
+// constants/footer.ts
+export const footerLinks = {
+  about: ['Company', 'Leadership', 'Press', 'Careers'],
+  help: ['Help Center', 'Support Team', 'Community', 'FAQs'],
+  product: [
+    'Overview',
+    'Business Account',
+    'Credit Card',
+    'Financial Modelling',
+  ],
+  company: ['About NaijaGasOnline', 'Contact', 'News & Blogs'],
+};
+
+export const socialIcons = [
+  { icon: 'facebook', url: '#' },
+  { icon: 'youtube', url: '#' },
+  { icon: 'pinterest', url: '#' },
+  { icon: 'instagram', url: '#' },
+  { icon: 'twitter', url: '#' },
 ];

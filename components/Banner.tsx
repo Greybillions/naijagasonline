@@ -25,36 +25,36 @@ const item = {
 
 const Banner = () => {
   return (
-    <section className='relative bg-grid w-full h-auto overflow-hidden'>
+    <section className='relative bg-grid w-full overflow-hidden md:py-1 py-16 px-4 sm:px-6 lg:px-8'>
       <motion.div
         initial='hidden'
         animate='show'
         variants={container}
-        className='max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 relative z-10'
+        className='max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10'
       >
         {/* Left - Image */}
         <motion.div
           variants={item}
-          className='md:w-1/2 w-full flex justify-center'
+          className='w-full md:w-1/2 flex justify-center'
         >
           <Image
             src={images.banner}
             alt='Banner'
-            width={380}
-            height={380}
-            className='object-contain'
+            width={400}
+            height={400}
+            className='w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-contain'
           />
         </motion.div>
 
         {/* Right - Text */}
         <motion.div
           variants={item}
-          className='md:w-1/2 w-full flex flex-col justify-center text-white mt-10 md:mt-0 gap-4 text-center md:text-left'
+          className='w-full md:w-1/2 flex flex-col justify-center items-center md:items-start gap-4 text-center md:text-left text-white'
         >
-          <h1 className='text-4xl md:text-5xl font-bold leading-tight'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold leading-tight'>
             Elegant Craft Gas <span className='text-orange-500'>Cylinder</span>
           </h1>
-          <p className='text-base md:text-lg text-white/90'>
+          <p className='text-base sm:text-lg text-white/90 max-w-md'>
             Designed for safety, crafted with style. Premium gas delivery at
             your doorstep.
           </p>

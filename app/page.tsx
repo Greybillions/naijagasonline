@@ -8,7 +8,7 @@ import Banner from '@/components/Banner';
 
 const Home = () => {
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen'>
+    <div className='flex flex-col items-center justify-center min-h-auto'>
       <Hero />
       <Product />
       <About />

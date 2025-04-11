@@ -24,41 +24,48 @@ const item = {
 
 const Hero = () => {
   return (
-    <section className='relative flex flex-col h-screen w-full overflow-hidden'>
+    <section className='relative flex flex-col min-h-screen w-full overflow-hidden bg-white'>
       <Header />
-      <div className='h-[1px] w-full bottom-0 left-0 bg-gray-300' />
+      <div className='h-[1px] w-full bg-gray-300' />
 
       <motion.div
         initial='hidden'
         animate='show'
         variants={container}
-        className='mx-auto h-[75%] max-w-[1300px] p-10 rounded-2xl mt-6 w-full bg-[#e6e9f2]'
+        className='mx-auto max-w-[1300px] p-6 sm:p-10 mt-6 w-full bg-[#e6e9f2] rounded-2xl h-auto md:h-[80vh]'
       >
-        <div className='flex items-center justify-start h-full w-full'>
+        <div className='flex flex-col-reverse md:flex-row items-center justify-between w-full h-full gap-10'>
           {/* Text content */}
-          <div className='flex flex-col items-start w-[50%] justify-center gap-4'>
-            <motion.p variants={item} className='text-xl text-[#ea580c]'>
+          <div className='w-full md:w-1/2 flex flex-col gap-4 text-center md:text-left items-center md:items-start justify-center'>
+            <motion.p
+              variants={item}
+              className='text-lg sm:text-xl text-[#ea580c]'
+            >
               Exclusive Deal 40% off
             </motion.p>
 
             <motion.h1
               variants={item}
-              className='text-4xl md:text-6xl font-bold text-gray-800'
+              className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 leading-tight'
             >
               Fast & Reliable Gas Delivery, Right to Your Doorstep
             </motion.h1>
 
             <motion.div
               variants={item}
-              className='flex items-center justify-start gap-2 mt-4'
+              className='flex flex-col sm:flex-row gap-3 mt-4 justify-center md:justify-start'
             >
-              <Button variant='primary' url='/shop' className='hover:scale-102'>
+              <Button
+                variant='primary'
+                url='/shop'
+                className='hover:scale-102 w-full sm:w-auto'
+              >
                 Order Now
               </Button>
               <Button
                 variant='ghost'
                 url='/shop'
-                className='hover:translate-x-1'
+                className='hover:translate-x-1 w-full sm:w-auto'
               >
                 Learn More
                 <MdOutlineArrowRightAlt className='text-2xl ml-2 transition-all' />
@@ -69,9 +76,15 @@ const Hero = () => {
           {/* Hero image */}
           <motion.div
             variants={item}
-            className='flex items-center relative justify-center w-[50%] h-full'
+            className='w-full md:w-1/2 flex items-center justify-center'
           >
-            <Image src={images.hero} alt='hero' width={420} height={420} />
+            <Image
+              src={images.hero}
+              alt='hero'
+              width={400}
+              height={400}
+              className='lg:w-[450px] h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-contain'
+            />
           </motion.div>
         </div>
       </motion.div>

@@ -24,21 +24,21 @@ const Products = () => {
   return (
     <section
       id='shop'
-      className='flex flex-col items-center justify-center w-full max-w-[1200px] mx-auto px-4 py-16'
+      className='flex flex-col items-center justify-center w-full px-4 sm:px-6 lg:px-8 py-16'
     >
-      <div className='flex flex-col items-center w-full justify-center min-h-auto'>
+      <div className='w-full max-w-7xl flex flex-col items-center justify-center'>
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className='text-4xl font-bold text-left w-full'
+          className='text-3xl sm:text-4xl font-bold text-left w-full'
         >
           Popular Products
         </motion.h1>
 
-        {/* Grid of products with animation */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 w-full'>
+        {/* Responsive Product Grid */}
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 w-full mt-10'>
           {products.map((product, index) => (
             <motion.div
               key={product.id}
@@ -47,6 +47,7 @@ const Products = () => {
               whileInView='visible'
               viewport={{ once: true }}
               variants={fadeUp}
+              className='w-full'
             >
               <ProductCard
                 title={product.title}
@@ -59,14 +60,16 @@ const Products = () => {
           ))}
         </div>
 
+        {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           viewport={{ once: true }}
+          className='mt-10'
         >
           <Button
-            className='border border-gray-300 mt-6 text-sm transition-all duration-200 hover:opacity-90 cursor-pointer hover:scale-103'
+            className='border border-gray-300 text-sm transition-all duration-200 hover:opacity-90 hover:scale-105'
             variant='ghost'
           >
             See More
@@ -74,7 +77,10 @@ const Products = () => {
         </motion.div>
       </div>
 
-      <Feature />
+      {/* Feature Section Below */}
+      <div className='w-full mt-16'>
+        <Feature />
+      </div>
     </section>
   );
 };
