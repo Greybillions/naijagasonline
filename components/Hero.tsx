@@ -41,7 +41,7 @@ const Hero = () => {
           <div className='w-full md:w-1/2 flex flex-col gap-4 text-center md:text-left items-center md:items-start justify-center'>
             <motion.p
               variants={item}
-              className='text-lg sm:text-xl text-[#ea580c]'
+              className='text-lg hidden md:flex sm:text-xl text-[#ea580c]'
             >
               Welcome to NaijaGas Online
             </motion.p>
@@ -60,7 +60,7 @@ const Hero = () => {
               <Button
                 variant='primary'
                 onClick={() => setShowModal(true)}
-                className='hover:scale-102 w-full sm:w-auto'
+                className='hover:scale-102 text-2xl w-full sm:w-auto'
               >
                 How do we help you?
               </Button>
@@ -70,8 +70,14 @@ const Hero = () => {
           {/* Hero image */}
           <motion.div
             variants={item}
-            className='w-full md:w-1/2 flex items-center justify-center'
+            className='w-full md:w-1/2 flex flex-col items-center justify-center'
           >
+            <motion.p
+              variants={item}
+              className='text-2xl md:hidden flex font-semibold text-[#ea580c]'
+            >
+              Welcome to NaijaGas Online
+            </motion.p>
             <Image
               src={images.hero}
               alt='hero'

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { images } from '@/constants/images';
 import { link } from '@/constants';
-import { CiUser } from 'react-icons/ci';
 import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
 
 const Header = () => {
@@ -40,14 +39,6 @@ const Header = () => {
 
         {/* Right side actions */}
         <div className='flex items-center gap-2 sm:gap-4'>
-          <Link
-            href='/login'
-            className='p-2 sm:px-4 sm:py-2 text-base flex items-center gap-2 hover:bg-[#e6e9f2] rounded-xl'
-          >
-            <CiUser className='text-xl text-gray-500' />
-            <span className='hidden sm:inline'>Account</span>
-          </Link>
-
           {/* Hamburger Menu Icon - mobile only */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
