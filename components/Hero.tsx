@@ -110,7 +110,7 @@ const Hero = () => {
                 Get a Service
               </Link>
               <Link
-                href='/login'
+                href='/join'
                 className='block w-full rounded-md bg-orange-500 text-white py-2'
               >
                 Join Us

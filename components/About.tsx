@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { servicePoints } from '@/constants';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,6 +15,16 @@ const fadeUp = {
     },
   }),
 };
+
+const aboutPoints = [
+  'We are LPG booking and delivery outfit. Setup to provide convenience for all homes and cooking kitchens anywhere anytime.',
+  'Our prices are competitive and delivery time is the fastest equipped with state of the earth technology to deliver your cooking gas to your home safely.',
+  'We provide morning and night services even at the point when you run out of gas while cooking, we provide the Emergency Support Combo.',
+  'Naija Gas Online is a Nigerian founded and funded first q-commerce platform in the oil and gas industry.',
+  'First launched in 2019 at the city of Port Harcourt. Sweeping over 10,000 LPG monthly subscribers within 18 months of launching.',
+  'Now in Lagos City supporting homes, kitchens, restaurants, hotels and all business with our services.',
+  "We have a team of industry experts ensuring the safety of our riders, and quality assurance of the product to be delivered. LPG is the best for our customer's protection.",
+];
 
 const About = () => {
   return (
@@ -36,9 +45,9 @@ const About = () => {
         </p>
 
         <div className='grid md:grid-cols-2 gap-8 text-left w-full'>
-          {servicePoints.map((point, index) => (
+          {aboutPoints.map((point, index) => (
             <motion.div
-              key={point.title}
+              key={index}
               custom={index}
               initial='hidden'
               whileInView='visible'
@@ -46,10 +55,7 @@ const About = () => {
               variants={fadeUp}
               className='bg-gray-100 rounded-xl p-6 shadow-sm hover:shadow-md transition'
             >
-              <h3 className='text-xl font-semibold text-orange-500 mb-2'>
-                {point.title}
-              </h3>
-              <p className='text-gray-700 text-sm'>{point.description}</p>
+              <p className='text-gray-700 text-sm'>{point}</p>
             </motion.div>
           ))}
         </div>
