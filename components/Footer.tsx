@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX } from 'react';
+import React, { JSX, useState } from 'react';
 import { footerLinks, socialIcons } from '@/constants';
 import {
   FaFacebookF,
@@ -11,6 +11,7 @@ import {
 } from 'react-icons/fa';
 import Image from 'next/image';
 import { images } from '@/constants/images';
+import { supabase } from '@/config/supabaseClient.config';
 
 const iconMap: Record<string, JSX.Element> = {
   facebook: <FaFacebookF />,
@@ -21,6 +22,26 @@ const iconMap: Record<string, JSX.Element> = {
 };
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [success, setSuccess] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!email) return;
+
+    const { error } = await supabase
+      .from('newsletter_subscribers')
+      .insert([{ email }]);
+
+    if (!error) {
+      setSuccess(true);
+      setEmail('');
+    } else {
+      console.error('Subscription error:', error.message);
+    }
+  };
+
   return (
     <footer className='bg-[#111827] text-white pt-16 pb-6 px-6'>
       <div className='max-w mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start'>
@@ -51,10 +72,15 @@ const Footer = () => {
           <h3 className='text-lg font-semibold mb-3'>
             Get Our News And Updates
           </h3>
-          <form className='flex flex-col sm:flex-row items-stretch max-w-md w-full space-y-3 sm:space-y-0 sm:space-x-2'>
+          <form
+            onSubmit={handleSubscribe}
+            className='flex flex-col sm:flex-row items-stretch max-w-md w-full space-y-3 sm:space-y-0 sm:space-x-2'
+          >
             <input
               type='email'
               placeholder='Enter your email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className='flex-1 px-4 py-2 rounded-md sm:rounded-l-md sm:rounded-r-none bg-gray-800 text-white border border-gray-600 placeholder:text-gray-400'
             />
             <button
@@ -64,6 +90,12 @@ const Footer = () => {
               Subscribe
             </button>
           </form>
+
+          {success && (
+            <p className='text-green-400 text-sm mt-2'>
+              🎉 Subscription successful!
+            </p>
+          )}
 
           <p className='text-xs text-gray-500 mt-2'>
             By subscribing you agree to our{' '}

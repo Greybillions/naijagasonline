@@ -8,6 +8,7 @@ import Button from './Button';
 import clsx from 'clsx';
 
 type ProductCardProps = {
+  id: string;
   title: string;
   subtitle: string;
   price: number;
@@ -18,6 +19,7 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({
+  id,
   title,
   subtitle,
   price,
@@ -38,7 +40,7 @@ const ProductCard = ({
     >
       {/* Product Image */}
       <div className='relative w-full aspect-square mb-4 rounded-lg overflow-hidden flex justify-center items-center'>
-        <Link href={`/product/${title}`} className='w-full h-full'>
+        <Link href={`/product/${id}`} className='w-full h-full'>
           <Image
             src={image}
             alt={title}

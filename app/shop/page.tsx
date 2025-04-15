@@ -7,6 +7,8 @@ import { gasOptions } from '@/constants';
 import Footer from '@/components/Footer';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import Header from '@/components/Header';
+import { supabase } from '@/config/supabaseClient.config';
+import Link from 'next/link';
 
 // Define a union type for valid states
 type ValidState = keyof typeof NigerianCities;
@@ -15,31 +17,41 @@ const ShopPage = () => {
   const [state, setState] = useState<ValidState | ''>('');
   const [city, setCity] = useState('');
   const [kg, setKg] = useState('');
-  const [name, setName] = useState('');
+  const [full_name, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!state || !city || !kg || !name || !phone) {
+    if (!state || !city || !kg || !full_name || !phone) {
       alert('Please fill out all fields.');
       return;
     }
 
-    const orderDetails = {
+    const { error } = await supabase.from('orders').insert({
       state,
       city,
       kg,
-      name,
+      full_name,
       phone,
-    };
+    });
 
-    console.log('Order Submitted:', orderDetails);
-    // You can replace this with an API call or toast here
+    if (error) {
+      console.error('Order submission error:', error.message);
+      alert('Something went wrong. Please try again.');
+    } else {
+      setSuccess(true);
+      setState('');
+      setCity('');
+      setKg('');
+      setFullName('');
+      setPhone('');
+    }
   };
 
   return (
-    <section className='w-full  bg-gray-100'>
+    <section className='w-full bg-gray-100'>
       <Header />
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
         <h1 className='text-2xl sm:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-2'>
@@ -118,8 +130,8 @@ const ShopPage = () => {
             </label>
             <input
               type='text'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={full_name}
+              onChange={(e) => setFullName(e.target.value)}
               className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
               placeholder='Enter your name'
             />
@@ -148,6 +160,20 @@ const ShopPage = () => {
             </button>
           </div>
         </form>
+
+        {success && (
+          <div className='bg-green-100 text-green-800 px-6 py-4 rounded-md shadow text-center mb-8'>
+            <p className='font-semibold text-lg'>
+              Order submitted successfully!
+            </p>
+            <Link
+              href='/'
+              className='underline text-orange-600 font-medium mt-2 inline-block'
+            >
+              Go back to home
+            </Link>
+          </div>
+        )}
 
         {/* Products */}
         <Products />

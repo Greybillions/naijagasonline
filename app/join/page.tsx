@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/config/supabaseClient.config';
+import Link from 'next/link';
 
 const JoinUs = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,8 @@ const JoinUs = () => {
     message: '',
   });
 
+  const [showModal, setShowModal] = useState(false);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -22,13 +26,38 @@ const JoinUs = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    const { data, error } = await supabase.from('join_requests').insert([
+      {
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        role: formData.role,
+        message: formData.message,
+      },
+    ]);
+
+    if (error) {
+      console.error('Error submitting:', error.message);
+    } else {
+      console.log('Submitted data:', data);
+      // Reset form data
+      setFormData({
+        fullName: '',
+        email: '',
+        phone: '',
+        role: '',
+        message: '',
+      });
+      // Show success modal
+      setShowModal(true);
+    }
   };
 
   return (
-    <section className='bg-white'>
+    <section className='bg-white relative'>
       <Header />
       <div className='max-w-4xl mx-auto px-4 py-16'>
         <h1 className='text-4xl font-bold text-center mb-8 text-gray-900'>
@@ -119,6 +148,27 @@ const JoinUs = () => {
           </button>
         </form>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
+          <div className='bg-white rounded-xl shadow-xl p-6 max-w-sm text-center'>
+            <h2 className='text-2xl font-semibold text-gray-800 mb-4'>
+              Registration Successful 🎉
+            </h2>
+            <p className='text-gray-600 mb-6'>
+              Thanks for joining NaijaGas Online!
+            </p>
+            <Link
+              href='/'
+              className='inline-block bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600'
+            >
+              Back to Home
+            </Link>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </section>
   );
