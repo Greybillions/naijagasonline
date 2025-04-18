@@ -10,13 +10,13 @@ import Header from '@/components/Header';
 import { supabase } from '@/config/supabaseClient.config';
 import Link from 'next/link';
 
-// Define a union type for valid states
 type ValidState = keyof typeof NigerianCities;
 
 const ShopPage = () => {
   const [state, setState] = useState<ValidState | ''>('');
   const [city, setCity] = useState('');
   const [kg, setKg] = useState('');
+  const [price, setPrice] = useState<number | null>(null);
   const [full_name, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [success, setSuccess] = useState(false);
@@ -33,6 +33,7 @@ const ShopPage = () => {
       state,
       city,
       kg,
+      price,
       full_name,
       phone,
     });
@@ -45,9 +46,16 @@ const ShopPage = () => {
       setState('');
       setCity('');
       setKg('');
+      setPrice(null);
       setFullName('');
       setPhone('');
     }
+  };
+
+  const handleKgChange = (value: string) => {
+    setKg(value);
+    const selected = gasOptions.find((opt) => opt.label === value);
+    setPrice(selected ? selected.price : null);
   };
 
   return (
@@ -63,7 +71,6 @@ const ShopPage = () => {
           className='grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-6 rounded-xl shadow mb-10'
           onSubmit={handleSubmit}
         >
-          {/* State */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               State
@@ -83,7 +90,6 @@ const ShopPage = () => {
             </select>
           </div>
 
-          {/* City */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               City
@@ -104,14 +110,13 @@ const ShopPage = () => {
             </select>
           </div>
 
-          {/* KG Option */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               Gas Size (KG)
             </label>
             <select
               value={kg}
-              onChange={(e) => setKg(e.target.value)}
+              onChange={(e) => handleKgChange(e.target.value)}
               className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
             >
               <option value=''>Select KG</option>
@@ -123,7 +128,19 @@ const ShopPage = () => {
             </select>
           </div>
 
-          {/* Contact Name */}
+          <div>
+            <label className='block mb-1 font-medium text-sm text-gray-700'>
+              Price
+            </label>
+            <input
+              type='text'
+              value={price !== null ? `₦${price.toLocaleString()}` : ''}
+              readOnly
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm bg-gray-100 cursor-not-allowed'
+              placeholder='Auto-selected'
+            />
+          </div>
+
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               Full Name
@@ -137,7 +154,6 @@ const ShopPage = () => {
             />
           </div>
 
-          {/* Contact Phone */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               Phone Number
@@ -175,7 +191,6 @@ const ShopPage = () => {
           </div>
         )}
 
-        {/* Products */}
         <Products />
       </div>
       <Footer />

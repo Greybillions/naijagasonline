@@ -13,13 +13,59 @@ type Product = {
   image?: string;
 };
 
+type User = {
+  id: string;
+  seller_name: string;
+  email: string;
+  phone: string;
+  state: string;
+  city: string;
+};
+
+type JoinRequest = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  state: string;
+  city: string;
+  role: string;
+  message: string;
+};
+
+type NewsletterSubscriber = {
+  id: string;
+  email: string;
+};
+
+type Order = {
+  id: string;
+  full_name: string;
+  email: string;
+  kg: number;
+  phone: number;
+  price: number;
+  status: string;
+  state: string;
+  city: string;
+  created_at: string;
+};
+
 const AdminPage = () => {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
+  const [newsletterSubscribers, setNewsletterSubscribers] = useState<
+    NewsletterSubscriber[]
+  >([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<
+    'products' | 'users' | 'orders' | 'join_requests' | 'newsletter_subscribers'
+  >('products');
 
-  // AUTH CHECK
   useEffect(() => {
     const isAdmin = localStorage.getItem('isAdmin');
     if (isAdmin) {
@@ -29,20 +75,44 @@ const AdminPage = () => {
     }
   }, [router]);
 
-  // FETCH PRODUCTS
   useEffect(() => {
-    if (!isAdmin) return;
+    const fetchData = async () => {
+      if (!isAdmin) return;
 
-    const fetchProducts = async () => {
-      const { data, error } = await supabase.from('products').select('*');
-      if (!error && data) {
-        setProducts(data);
+      if (activeTab === 'products') {
+        const { data, error } = await supabase.from('products').select('*');
+        if (!error && data) setProducts(data);
       }
+
+      if (activeTab === 'users') {
+        const { data, error } = await supabase.from('products').select('*');
+        if (!error && data) setUsers(data);
+      }
+
+      if (activeTab === 'orders') {
+        const { data, error } = await supabase.from('orders').select('*');
+        if (!error && data) setOrders(data);
+      }
+
+      if (activeTab === 'join_requests') {
+        const { data, error } = await supabase
+          .from('join_requests')
+          .select('*');
+        if (!error && data) setJoinRequests(data);
+      }
+
+      if (activeTab === 'newsletter_subscribers') {
+        const { data, error } = await supabase
+          .from('newsletter_subscribers')
+          .select('*');
+        if (!error && data) setNewsletterSubscribers(data);
+      }
+
       setLoading(false);
     };
 
-    fetchProducts();
-  }, [isAdmin]);
+    fetchData();
+  }, [isAdmin, activeTab]);
 
   const handleDelete = async (id: string) => {
     const { error } = await supabase.from('products').delete().eq('id', id);
@@ -58,68 +128,204 @@ const AdminPage = () => {
     router.replace('/admin/login');
   };
 
-  if (!isAdmin || loading) {
-    return <div className='p-6'>Loading...</div>;
-  }
+  if (!isAdmin || loading) return <div className='p-6'>Loading...</div>;
+
+  const getTotal = () => {
+    switch (activeTab) {
+      case 'products':
+        return products.length;
+      case 'users':
+        return users.length;
+      case 'orders':
+        return orders.length;
+      case 'join_requests':
+        return joinRequests.length;
+      case 'newsletter_subscribers':
+        return newsletterSubscribers.length;
+      default:
+        return 0;
+    }
+  };
 
   return (
-    <div className='max-w-5xl mx-auto p-6'>
+    <div className='max-w-6xl mx-auto px-6 py-10'>
       <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>Admin – Product Management</h1>
+        <h1 className='text-2xl md:text-3xl font-bold'>Admin Dashboard</h1>
         <button
           onClick={handleLogout}
-          className='text-sm bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700'
+          className='bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm'
         >
           Logout
         </button>
       </div>
 
-      <Link
-        href='/admin/new'
-        className='mb-4 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700'
-      >
-        Add New Product
-      </Link>
+      <div className='mb-8'>
+        <select
+          value={activeTab}
+          onChange={(e) => setActiveTab(e.target.value as typeof activeTab)}
+          className='px-4 py-2 border rounded-md'
+        >
+          <option value='products'>Products</option>
+          <option value='users'>Users</option>
+          <option value='orders'>Orders</option>
+          <option value='join_requests'>Join Requests</option>
+          <option value='newsletter_subscribers'>Newsletter Subscribers</option>
+        </select>
+        <span className='text-sm ml-4 text-gray-600'>Total: {getTotal()}</span>
+      </div>
 
-      <div className='grid gap-4 mt-4'>
-        {products.map((product) => (
-          <div
-            key={product.id}
-            className='p-4 border rounded flex items-center justify-between'
-          >
-            <div className='flex items-center gap-4'>
-              {product.image && (
-                <Image
-                  src={product.image}
-                  alt={product.title}
-                  width={80}
-                  height={80}
-                  className='rounded object-cover'
-                />
-              )}
-              <div>
-                <h2 className='font-semibold'>{product.title}</h2>
-                <p className='text-orange-600 font-medium'>
-                  ₦{product.price.toLocaleString()}
-                </p>
-              </div>
-            </div>
-            <div className='flex gap-2'>
-              <Link
-                href={`/admin/edit/${product.id}`}
-                className='text-blue-600 hover:underline'
-              >
-                Edit
-              </Link>
-              <button
-                onClick={() => handleDelete(product.id)}
-                className='text-red-500 hover:underline'
-              >
-                Delete
-              </button>
+      <div>
+        {activeTab === 'products' && (
+          <div>
+            <Link
+              href='/admin/addNewProduct'
+              className='mb-6 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700'
+            >
+              Add New Product
+            </Link>
+            <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+              {products.length === 0 && <p>No products found.</p>}
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className='p-4 border rounded flex md:flex-col items-center justify-between'
+                >
+                  <div className='flex md:flex-col items-center gap-4'>
+                    {product.image && (
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        width={80}
+                        height={80}
+                        className='rounded object-cover'
+                      />
+                    )}
+                    <div>
+                      <h2 className='font-semibold text-lg'>{product.title}</h2>
+                      <p className='text-orange-600 font-medium'>
+                        ₦{product.price.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className='flex gap-3'>
+                    <Link
+                      href={`/admin/edit/${product.id}`}
+                      className='text-blue-600 hover:underline'
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className='text-red-500 hover:underline'
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+        )}
+
+        {activeTab === 'orders' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {orders.length === 0 ? (
+              <p>No orders found.</p>
+            ) : (
+              orders.map((order) => (
+                <div
+                  key={order.id}
+                  className='p-4 border rounded flex justify-between items-center'
+                >
+                  <div>
+                    <p className='font-semibold text-lg'>{order.full_name}</p>
+                    <p className='text-sm text-gray-700'>
+                      email: {order.email}
+                    </p>
+                    <p className='text-sm'>Kg: {order.kg}</p>
+                    <p className='text-sm'>
+                      Total: ₦{order.price.toLocaleString()}
+                    </p>
+                    <p className='text-sm'>📞 {order.phone}</p>
+                    <p className='text-sm'>
+                      {order.city}, {order.state}
+                    </p>
+                    <p className='text-sm'>
+                      Order Date:{' '}
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className='text-right'>
+                    <span className='text-xs bg-green-100 text-shadow-green-600 px-2 py-1 rounded'>
+                      {order.status}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {activeTab === 'users' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {users.length === 0 ? (
+              <p>No users found.</p>
+            ) : (
+              users.map((user) => (
+                <div
+                  key={user.id}
+                  className='p-4 border rounded flex justify-between items-center'
+                >
+                  <div>
+                    <p className='font-semibold text-lg'>{user.seller_name}</p>
+                    <p className='text-sm text-gray-700'>{user.email}</p>
+                    <p className='text-sm'>📞 {user.phone}</p>
+                  </div>
+                  <div className='text-right'>
+                    <p className='text-sm text-gray-600'>
+                      {user.city}, {user.state}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {activeTab === 'join_requests' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {joinRequests.length === 0 ? (
+              <p>No join requests.</p>
+            ) : (
+              joinRequests.map((req) => (
+                <div key={req.id} className='p-4 border rounded'>
+                  <p className='font-semibold text-lg'>{req.full_name}</p>
+                  <p className='text-sm text-gray-700'>{req.email}</p>
+                  <p className='text-sm'>📞 {req.phone}</p>
+                  <p className='text-sm'>Role: {req.role}</p>
+                  <p className='text-sm'>
+                    Address: {req.state}, {req.city}
+                  </p>
+                  <p className='text-sm'>Message: {req.message}</p>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {activeTab === 'newsletter_subscribers' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {newsletterSubscribers.length === 0 ? (
+              <p>No subscribers yet.</p>
+            ) : (
+              newsletterSubscribers.map((sub) => (
+                <div key={sub.id} className='p-4 border rounded'>
+                  <p className='text-sm'>{sub.email}</p>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

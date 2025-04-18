@@ -12,6 +12,8 @@ const JoinUs = () => {
     email: '',
     phone: '',
     role: '',
+    state: '',
+    city: '',
     message: '',
   });
 
@@ -35,6 +37,8 @@ const JoinUs = () => {
         email: formData.email,
         phone: formData.phone,
         role: formData.role,
+        state: formData.state,
+        city: formData.city,
         message: formData.message,
       },
     ]);
@@ -43,15 +47,15 @@ const JoinUs = () => {
       console.error('Error submitting:', error.message);
     } else {
       console.log('Submitted data:', data);
-      // Reset form data
       setFormData({
         fullName: '',
         email: '',
         phone: '',
         role: '',
+        state: '',
+        city: '',
         message: '',
       });
-      // Show success modal
       setShowModal(true);
     }
   };
@@ -131,6 +135,26 @@ const JoinUs = () => {
             <option value='Logistics'>Logistic Outfit</option>
           </select>
 
+          <input
+            name='state'
+            type='text'
+            value={formData.state}
+            onChange={handleChange}
+            placeholder='State'
+            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full'
+            required
+          />
+
+          <input
+            name='city'
+            type='text'
+            value={formData.city}
+            onChange={handleChange}
+            placeholder='City'
+            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full'
+            required
+          />
+
           <textarea
             name='message'
             value={formData.message}
@@ -149,7 +173,6 @@ const JoinUs = () => {
         </form>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
           <div className='bg-white rounded-xl shadow-xl p-6 max-w-sm text-center'>
