@@ -51,8 +51,8 @@ const AddNewProduct = () => {
     let imageUrl = '';
 
     if (imageFile) {
-      if (imageFile.size > 5 * 1024 * 1024) {
-        alert('File too large. Please upload an image under 5MB.');
+      if (imageFile.size > 2 * 1024 * 1024) {
+        alert('File too large. Please upload an image under 2MB.');
         setLoading(false);
         return;
       }

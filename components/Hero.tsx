@@ -9,9 +9,14 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 const container = {
-  hidden: {},
+  hidden: { opacity: 0, scale: 0.95 },
   show: {
+    opacity: 1,
+    scale: 1,
     transition: {
+      duration: 0.8,
+      ease: 'easeOut',
+      when: 'beforeChildren',
       staggerChildren: 0.2,
     },
   },
@@ -19,7 +24,11 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  },
 };
 
 const Hero = () => {
@@ -27,6 +36,18 @@ const Hero = () => {
 
   return (
     <section className='relative flex flex-col min-h-screen w-full overflow-hidden bg-white'>
+      {/* Background Image */}
+      <Image
+        src={images.bgImg}
+        alt='Background'
+        fill
+        priority
+        className='object-cover rounded-2xl z-0'
+      />
+
+      {/* Dark overlay */}
+      <div className='absolute inset-0 bg-black/40 z-[1] rounded-2xl' />
+
       <Header />
       <div className='h-[1px] w-full bg-gray-300' />
 
@@ -34,36 +55,50 @@ const Hero = () => {
         initial='hidden'
         animate='show'
         variants={container}
-        className='mx-auto max-w-[1300px] p-6 sm:p-10 mt-6 w-full bg-[#e6e9f2] rounded-2xl h-auto md:h-[80vh]'
+        className='relative mx-auto max-w-[1300px] p-6 sm:p-10 mt-6 w-full rounded-2xl h-auto md:h-[80vh] overflow-hidden'
       >
-        <div className='flex flex-col-reverse md:flex-row items-center justify-between w-full h-full gap-10'>
+        {/* Overlay Content */}
+        <div className='relative z-10 flex flex-col-reverse md:flex-row items-center justify-between w-full h-full gap-10'>
           {/* Text content */}
           <div className='w-full md:w-1/2 flex flex-col gap-4 text-center md:text-left items-center md:items-start justify-center'>
             <motion.p
               variants={item}
-              className='text-lg hidden md:flex sm:text-xl text-[#ea580c]'
+              className='text-lg hidden md:flex sm:text-xl text-white'
             >
               Welcome to NaijaGas Online
             </motion.p>
 
             <motion.h1
               variants={item}
-              className='text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 leading-tight'
+              className='text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight'
             >
               Your Smart Choice for Cooking Gas
             </motion.h1>
 
+            {/* Pulsating Button */}
             <motion.div
               variants={item}
               className='flex flex-col sm:flex-row gap-3 mt-4 justify-center md:justify-start'
             >
-              <Button
-                variant='primary'
-                onClick={() => setShowModal(true)}
-                className='hover:scale-102 text-2xl w-full sm:w-auto'
+              <motion.div
+                animate={{
+                  scale: [1, 1.05, 1],
+                  opacity: [1, 0.9, 1],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
               >
-                How do we help you?
-              </Button>
+                <Button
+                  variant='primary'
+                  onClick={() => setShowModal(true)}
+                  className='hover:scale-102 text-2xl w-full sm:w-auto'
+                >
+                  How do we help you?
+                </Button>
+              </motion.div>
             </motion.div>
           </div>
 
@@ -74,7 +109,7 @@ const Hero = () => {
           >
             <motion.p
               variants={item}
-              className='text-2xl md:hidden flex font-semibold text-[#ea580c]'
+              className='text-2xl md:hidden flex font-semibold text-white'
             >
               Welcome to NaijaGas Online
             </motion.p>
@@ -83,7 +118,7 @@ const Hero = () => {
               alt='hero'
               width={400}
               height={400}
-              className='lg:w-[450px] h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-contain'
+              className='lg:w-[450px] h-auto max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-contain z-10'
             />
           </motion.div>
         </div>
@@ -99,19 +134,19 @@ const Hero = () => {
             <div className='space-y-3'>
               <Link
                 href='/shop'
-                className='block w-full rounded-md bg-orange-500 text-white py-2'
+                className='block w-full rounded-md bg-primary text-white py-2'
               >
                 Buy Gas Online
               </Link>
               <Link
                 href='/service'
-                className='block w-full rounded-md bg-orange-500 text-white py-2'
+                className='block w-full rounded-md bg-primary text-white py-2'
               >
                 Get a Service
               </Link>
               <Link
                 href='/join'
-                className='block w-full rounded-md bg-orange-500 text-white py-2'
+                className='block w-full rounded-md bg-primary text-white py-2'
               >
                 Join Us
               </Link>

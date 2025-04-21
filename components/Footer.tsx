@@ -56,11 +56,7 @@ const Footer = () => {
           {/* Social icons */}
           <div className='flex gap-4 mt-6 text-lg text-gray-300'>
             {socialIcons.map(({ icon, url }) => (
-              <a
-                key={icon}
-                href={url}
-                className='hover:text-orange-500 transition'
-              >
+              <a key={icon} href={url} className='hover:text-white transition'>
                 {iconMap[icon]}
               </a>
             ))}
@@ -85,7 +81,7 @@ const Footer = () => {
             />
             <button
               type='submit'
-              className='px-6 py-2 bg-orange-500 text-white font-semibold rounded-md sm:rounded-r-md sm:rounded-l-none hover:bg-orange-600 transition'
+              className='px-6 py-2 bg-primary text-white font-semibold rounded-md sm:rounded-r-md sm:rounded-l-none bg-primary-hover transition'
             >
               Subscribe
             </button>

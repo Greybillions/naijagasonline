@@ -11,7 +11,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className='sticky top-0 z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all'>
+    <header className='sticky top-0 z-50 bg-primary backdrop-blur-md shadow-sm transition-all'>
       <div className='flex items-center justify-between w-full h-[80px] max-w-[1300px] mx-auto px-4 md:px-6'>
         {/* Logo */}
         <Link href='/' className='flex items-center'>
@@ -30,7 +30,7 @@ const Header = () => {
             <Link
               key={item.title}
               href={item.url}
-              className='px-4 py-2 text-base text-gray-800 rounded-xl transition hover:bg-[#e6e9f2]'
+              className='px-4 py-2 text-base text-white rounded-xl transition hover:text-gray-300'
             >
               {item.title}
             </Link>
@@ -42,7 +42,7 @@ const Header = () => {
           {/* Hamburger Menu Icon - mobile only */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className='lg:hidden p-2 rounded-md text-gray-700 hover:bg-[#f3f4f6] transition'
+            className='lg:hidden p-2 rounded-md text-white transition'
           >
             {isMenuOpen ? (
               <HiOutlineX className='text-2xl' />
@@ -55,12 +55,12 @@ const Header = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className='lg:hidden px-6 pt-4 pb-6 bg-white shadow-md flex flex-col gap-4'>
+        <div className='lg:hidden px-6 pt-4 pb-6 bg-primary shadow-md flex flex-col gap-4'>
           {link.map((item) => (
             <Link
               key={item.title}
               href={item.url}
-              className='text-gray-700 hover:text-orange-500 text-base transition'
+              className='text-white text-base transition'
               onClick={() => setIsMenuOpen(false)}
             >
               {item.title}

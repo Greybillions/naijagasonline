@@ -52,7 +52,7 @@ const Banner = () => {
           className='w-full md:w-1/2 flex flex-col justify-center items-center md:items-start gap-4 text-center md:text-left text-white'
         >
           <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold leading-tight'>
-            Elegant Craft Gas <span className='text-orange-500'>Cylinder</span>
+            Elegant Craft Gas <span className='text-secondary'>Cylinder</span>
           </h1>
           <p className='text-base sm:text-lg text-white/90 max-w-md'>
             Designed for safety, crafted with style. Premium gas delivery at
@@ -60,7 +60,7 @@ const Banner = () => {
           </p>
           <motion.button
             variants={item}
-            className='mt-4 w-fit bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-full transition'
+            className='mt-4 w-fit bg-primary text-white font-medium py-3 px-6 rounded-full transition'
           >
             Shop Now
           </motion.button>

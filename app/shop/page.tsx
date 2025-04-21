@@ -19,12 +19,22 @@ const ShopPage = () => {
   const [price, setPrice] = useState<number | null>(null);
   const [full_name, setFullName] = useState('');
   const [phone, setPhone] = useState('');
+  const [homeAddress, setHomeAddress] = useState('');
+  const [deliveryOption, setDeliveryOption] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!state || !city || !kg || !full_name || !phone) {
+    if (
+      !state ||
+      !city ||
+      !kg ||
+      !full_name ||
+      !phone ||
+      !deliveryOption ||
+      !homeAddress
+    ) {
       alert('Please fill out all fields.');
       return;
     }
@@ -36,6 +46,8 @@ const ShopPage = () => {
       price,
       full_name,
       phone,
+      home_address: homeAddress,
+      delivery_option: deliveryOption,
     });
 
     if (error) {
@@ -49,6 +61,8 @@ const ShopPage = () => {
       setPrice(null);
       setFullName('');
       setPhone('');
+      setHomeAddress('');
+      setDeliveryOption('');
     }
   };
 
@@ -63,7 +77,7 @@ const ShopPage = () => {
       <Header />
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
         <h1 className='text-2xl sm:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-2'>
-          <HiOutlineLocationMarker className='w-6 h-6 text-orange-500' />
+          <HiOutlineLocationMarker className='w-6 h-6 text-primary' />
           Where is your location?
         </h1>
 
@@ -71,6 +85,7 @@ const ShopPage = () => {
           className='grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white p-6 rounded-xl shadow mb-10'
           onSubmit={handleSubmit}
         >
+          {/* State and City */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               State
@@ -110,6 +125,7 @@ const ShopPage = () => {
             </select>
           </div>
 
+          {/* KG and Price */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               Gas Size (KG)
@@ -141,6 +157,7 @@ const ShopPage = () => {
             />
           </div>
 
+          {/* Name and Phone */}
           <div>
             <label className='block mb-1 font-medium text-sm text-gray-700'>
               Full Name
@@ -167,16 +184,55 @@ const ShopPage = () => {
             />
           </div>
 
+          {/* Home Address */}
+          <div className='sm:col-span-2'>
+            <label className='block mb-1 font-medium text-sm text-gray-700'>
+              Home Address
+            </label>
+            <input
+              type='text'
+              value={homeAddress}
+              onChange={(e) => setHomeAddress(e.target.value)}
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
+              placeholder='E.g. No. 4, Adebayo Street, Lekki Phase 1'
+              required
+            />
+          </div>
+
+          {/* Delivery Option */}
+          <div className='sm:col-span-2'>
+            <label className='block mb-1 font-medium text-sm text-gray-700'>
+              Delivery Option
+            </label>
+            <select
+              value={deliveryOption}
+              onChange={(e) => setDeliveryOption(e.target.value)}
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
+              required
+            >
+              <option value=''>Select Delivery Option</option>
+              <option value='Replace Cylinder'>Replace Cylinder</option>
+              <option value='Pick and Drop my cylinder'>
+                Pick and Drop my cylinder
+              </option>
+            </select>
+            <p className='text-xs text-orange-600 mt-1'>
+              ⚠ Delivery fees vary by location.
+            </p>
+          </div>
+
+          {/* Submit */}
           <div className='sm:col-span-2 flex justify-center mt-4'>
             <button
               type='submit'
-              className='bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-2 rounded-md transition'
+              className='bg-primary bg-primary-hover text-white font-medium px-6 py-2 rounded-md transition'
             >
               Submit Order
             </button>
           </div>
         </form>
 
+        {/* Success Message */}
         {success && (
           <div className='bg-green-100 text-green-800 px-6 py-4 rounded-md shadow text-center mb-8'>
             <p className='font-semibold text-lg'>
@@ -184,7 +240,7 @@ const ShopPage = () => {
             </p>
             <Link
               href='/'
-              className='underline text-orange-600 font-medium mt-2 inline-block'
+              className='underline text-primary font-medium mt-2 inline-block'
             >
               Go back to home
             </Link>

@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/config/supabaseClient.config';
 import Link from 'next/link';
+import { NigerianCities } from '@/constants';
 
 const JoinUs = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +26,11 @@ const JoinUs = () => {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === 'state' && { city: '' }),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,7 +70,7 @@ const JoinUs = () => {
       <Header />
       <div className='max-w-4xl mx-auto px-4 py-16'>
         <h1 className='text-4xl font-bold text-center mb-8 text-gray-900'>
-          Join <span className='text-orange-500'>Us</span>
+          Join <span className='text-primary'>Us</span>
         </h1>
 
         <div className='bg-gray-50 p-6 rounded-xl shadow mb-10'>
@@ -135,25 +140,40 @@ const JoinUs = () => {
             <option value='Logistics'>Logistic Outfit</option>
           </select>
 
-          <input
+          {/* Updated State and City dropdowns */}
+          <select
             name='state'
-            type='text'
             value={formData.state}
             onChange={handleChange}
-            placeholder='State'
-            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full'
+            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full bg-white text-gray-700'
             required
-          />
+          >
+            <option value=''>Select State</option>
+            {Object.keys(NigerianCities).map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
 
-          <input
+          <select
             name='city'
-            type='text'
             value={formData.city}
             onChange={handleChange}
-            placeholder='City'
-            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full'
+            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full bg-white text-gray-700'
             required
-          />
+            disabled={!formData.state}
+          >
+            <option value=''>Select City</option>
+            {formData.state &&
+              NigerianCities[
+                formData.state as keyof typeof NigerianCities
+              ]?.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+          </select>
 
           <textarea
             name='message'
@@ -166,7 +186,7 @@ const JoinUs = () => {
 
           <button
             type='submit'
-            className='bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-md col-span-1 sm:col-span-2'
+            className='bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-2 rounded-md col-span-1 sm:col-span-2'
           >
             Submit
           </button>
@@ -184,7 +204,7 @@ const JoinUs = () => {
             </p>
             <Link
               href='/'
-              className='inline-block bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600'
+              className='inline-block bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-hover transition duration-200'
             >
               Back to Home
             </Link>

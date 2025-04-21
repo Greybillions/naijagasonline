@@ -1,0 +1,60 @@
+// types/index.ts
+
+export type Product = {
+  id: string;
+  title: string;
+  price: number;
+  image?: string;
+};
+
+export type User = {
+  id: string;
+  seller_name: string;
+  email: string;
+  phone: string;
+  state: string;
+  city: string;
+};
+
+export type JoinRequest = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  state: string;
+  city: string;
+  role: string;
+  message: string;
+};
+
+export type NewsletterSubscriber = {
+  id: string;
+  email: string;
+};
+
+export type Order = {
+  id: string;
+  full_name: string;
+  email: string;
+  kg: number;
+  phone: number;
+  price: number;
+  status: string;
+  state: string;
+  city: string;
+  home_address: string;
+  delivery_option: string;
+  created_at: string;
+};
+
+export type ContactForm = {
+  id: string;
+  full_name: string;
+  email: string;
+  message: string;
+  gas_info?: string;
+  image_url?: string;
+  state?: string;
+  city?: string;
+  created_at: string;
+};

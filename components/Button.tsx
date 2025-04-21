@@ -23,7 +23,7 @@ const Button = ({
     'inline-flex items-center justify-center px-10 py-3 rounded-full font-medium transition-all duration-200';
 
   const variants = {
-    primary: 'bg-[#ea580c] text-white transition-all hover:opacity-90',
+    primary: 'bg-primary text-white transition-all hover:opacity-90',
     ghost: 'bg-transparent text-gray-800 transition-all hover:opacity-80',
   };
 

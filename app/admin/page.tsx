@@ -6,50 +6,16 @@ import { supabase } from '@/config/supabaseClient.config';
 import Image from 'next/image';
 import Link from 'next/link';
 
-type Product = {
-  id: string;
-  title: string;
-  price: number;
-  image?: string;
-};
+import {
+  Product,
+  User,
+  JoinRequest,
+  NewsletterSubscriber,
+  Order,
+  ContactForm,
+} from '@/types';
 
-type User = {
-  id: string;
-  seller_name: string;
-  email: string;
-  phone: string;
-  state: string;
-  city: string;
-};
-
-type JoinRequest = {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  state: string;
-  city: string;
-  role: string;
-  message: string;
-};
-
-type NewsletterSubscriber = {
-  id: string;
-  email: string;
-};
-
-type Order = {
-  id: string;
-  full_name: string;
-  email: string;
-  kg: number;
-  phone: number;
-  price: number;
-  status: string;
-  state: string;
-  city: string;
-  created_at: string;
-};
+import { exportToCSV } from '@/utils/export';
 
 const AdminPage = () => {
   const router = useRouter();
@@ -61,9 +27,15 @@ const AdminPage = () => {
     NewsletterSubscriber[]
   >([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [contactForms, setContactForms] = useState<ContactForm[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
-    'products' | 'users' | 'orders' | 'join_requests' | 'newsletter_subscribers'
+    | 'products'
+    | 'users'
+    | 'orders'
+    | 'join_requests'
+    | 'newsletter_subscribers'
+    | 'contact_forms'
   >('products');
 
   useEffect(() => {
@@ -85,7 +57,9 @@ const AdminPage = () => {
       }
 
       if (activeTab === 'users') {
-        const { data, error } = await supabase.from('products').select('*');
+        const { data, error } = await supabase
+          .from('join_requests')
+          .select('*');
         if (!error && data) setUsers(data);
       }
 
@@ -106,6 +80,14 @@ const AdminPage = () => {
           .from('newsletter_subscribers')
           .select('*');
         if (!error && data) setNewsletterSubscribers(data);
+      }
+
+      if (activeTab === 'contact_forms') {
+        const { data, error } = await supabase
+          .from('contact_form')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (!error && data) setContactForms(data);
       }
 
       setLoading(false);
@@ -140,11 +122,22 @@ const AdminPage = () => {
         return orders.length;
       case 'join_requests':
         return joinRequests.length;
+      case 'contact_forms':
+        return contactForms.length;
       case 'newsletter_subscribers':
         return newsletterSubscribers.length;
       default:
         return 0;
     }
+  };
+
+  const dataMap = {
+    products,
+    users,
+    orders,
+    join_requests: joinRequests,
+    newsletter_subscribers: newsletterSubscribers,
+    contact_forms: contactForms,
   };
 
   return (
@@ -159,7 +152,7 @@ const AdminPage = () => {
         </button>
       </div>
 
-      <div className='mb-8'>
+      <div className='mb-8 flex flex-wrap items-center gap-4'>
         <select
           value={activeTab}
           onChange={(e) => setActiveTab(e.target.value as typeof activeTab)}
@@ -170,8 +163,20 @@ const AdminPage = () => {
           <option value='orders'>Orders</option>
           <option value='join_requests'>Join Requests</option>
           <option value='newsletter_subscribers'>Newsletter Subscribers</option>
+          <option value='contact_forms'>Contact Form Submissions</option>
         </select>
-        <span className='text-sm ml-4 text-gray-600'>Total: {getTotal()}</span>
+
+        <span className='text-sm text-gray-600'>Total: {getTotal()}</span>
+
+        <button
+          onClick={() => {
+            const data = dataMap[activeTab] as Record<string, unknown>[];
+            exportToCSV(data, activeTab);
+          }}
+          className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm'
+        >
+          Download CSV
+        </button>
       </div>
 
       <div>
@@ -226,7 +231,7 @@ const AdminPage = () => {
             </div>
           </div>
         )}
-
+        {/* orders */}
         {activeTab === 'orders' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {orders.length === 0 ? (
@@ -251,8 +256,12 @@ const AdminPage = () => {
                       {order.city}, {order.state}
                     </p>
                     <p className='text-sm'>
-                      Order Date:{' '}
+                      Order Date:
                       {new Date(order.created_at).toLocaleDateString()}
+                    </p>
+                    <p className='text-sm'>Address: {order.home_address}</p>
+                    <p className='text-sm'>
+                      Delivery Option: {order.delivery_option}{' '}
                     </p>
                   </div>
                   <div className='text-right'>
@@ -266,6 +275,7 @@ const AdminPage = () => {
           </div>
         )}
 
+        {/* users */}
         {activeTab === 'users' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {users.length === 0 ? (
@@ -291,7 +301,7 @@ const AdminPage = () => {
             )}
           </div>
         )}
-
+        {/* join requests */}
         {activeTab === 'join_requests' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {joinRequests.length === 0 ? (
@@ -312,7 +322,7 @@ const AdminPage = () => {
             )}
           </div>
         )}
-
+        {/* newsletter subscribers */}
         {activeTab === 'newsletter_subscribers' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {newsletterSubscribers.length === 0 ? (
@@ -321,6 +331,42 @@ const AdminPage = () => {
               newsletterSubscribers.map((sub) => (
                 <div key={sub.id} className='p-4 border rounded'>
                   <p className='text-sm'>{sub.email}</p>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* contact form submissions */}
+        {activeTab === 'contact_forms' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {contactForms.length === 0 ? (
+              <p>No contact form submissions yet.</p>
+            ) : (
+              contactForms.map((item) => (
+                <div key={item.id} className='p-4 border rounded'>
+                  <p className='font-semibold text-lg'>{item.full_name}</p>
+                  <p className='text-sm text-gray-700'>Email: {item.email}</p>
+                  <p className='text-sm'>
+                    State: {item.state}, City: {item.city}
+                  </p>
+                  <p className='text-sm'>Message: {item.message}</p>
+                  {item.gas_info && (
+                    <p className='text-sm'>Gas Info: {item.gas_info}</p>
+                  )}
+                  {item.image_url && (
+                    <a
+                      href={item.image_url}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='text-blue-600 text-sm underline mt-2 inline-block'
+                    >
+                      View Image
+                    </a>
+                  )}
+                  <p className='text-xs text-gray-500 mt-2'>
+                    Submitted: {new Date(item.created_at).toLocaleDateString()}
+                  </p>
                 </div>
               ))
             )}

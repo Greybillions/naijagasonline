@@ -118,10 +118,10 @@ export const footerLinks = {
 };
 
 export const socialIcons = [
-  { icon: 'facebook', url: '#' },
+  { icon: 'facebook', url: '' },
   { icon: 'youtube', url: '#' },
   { icon: 'pinterest', url: '#' },
-  { icon: 'instagram', url: '#' },
+  { icon: 'instagram', url: 'https://www.instagram.com/naijagasonline' },
   { icon: 'twitter', url: '#' },
 ];
 
