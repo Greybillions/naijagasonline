@@ -43,8 +43,15 @@ const Products = () => {
         .range(rangeStart, rangeEnd);
 
       if (error) throw error;
+
       if (data && data.length > 0) {
-        setProducts((prev) => [...prev, ...data]);
+        // Filter duplicates
+        setProducts((prev) => {
+          const existingIds = new Set(prev.map((p) => p.id));
+          const newProducts = data.filter((p) => !existingIds.has(p.id));
+          return [...prev, ...newProducts];
+        });
+
         if (data.length < rangeEnd - rangeStart + 1) {
           setHasMore(false);
         }

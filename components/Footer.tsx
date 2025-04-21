@@ -1,6 +1,6 @@
 'use client';
 
-import React, { JSX, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { footerLinks, socialIcons } from '@/constants';
 import {
   FaFacebookF,
@@ -24,6 +24,13 @@ const iconMap: Record<string, JSX.Element> = {
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(false), 5000);
+      return () => clearTimeout(timer); // cleanup
+    }
+  }, [success]);
 
   const handleSubscribe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
