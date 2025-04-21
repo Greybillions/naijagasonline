@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Header from './Header';
 import Image from 'next/image';
 import { images } from '@/constants/images';
 import Button from './Button';
@@ -42,20 +41,19 @@ const Hero = () => {
         alt='Background'
         fill
         priority
-        className='object-cover rounded-2xl z-0'
+        className='object-cover z-0'
       />
 
       {/* Dark overlay */}
-      <div className='absolute inset-0 bg-black/40 z-[1] rounded-2xl' />
+      <div className='absolute inset-0 bg-black/40 z-[1]' />
 
-      <Header />
       <div className='h-[1px] w-full bg-gray-300' />
 
       <motion.div
         initial='hidden'
         animate='show'
         variants={container}
-        className='relative mx-auto max-w-[1300px] p-6 sm:p-10 mt-6 w-full rounded-2xl h-auto md:h-[80vh] overflow-hidden'
+        className='relative mx-auto max-w-[1300px] p-6 sm:p-10 mt-6 w-full h-auto md:h-[80vh] overflow-hidden'
       >
         {/* Overlay Content */}
         <div className='relative z-10 flex flex-col-reverse md:flex-row items-center justify-between w-full h-full gap-10'>

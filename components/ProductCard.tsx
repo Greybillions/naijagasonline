@@ -6,6 +6,7 @@ import { GoHeartFill, GoHeart } from 'react-icons/go';
 import Link from 'next/link';
 import Button from './Button';
 import clsx from 'clsx';
+import { useCart } from '@/contexts/CartContext';
 
 type ProductCardProps = {
   id: string;
@@ -14,7 +15,6 @@ type ProductCardProps = {
   price: number;
   rating: number;
   image: string;
-  onBuy?: () => void;
   className?: string;
 };
 
@@ -25,19 +25,42 @@ const ProductCard = ({
   price,
   rating,
   image,
-  onBuy,
   className,
 }: ProductCardProps) => {
   const [liked, setLiked] = useState(false);
+  const [showNotif, setShowNotif] = useState(false);
+
   const toggleLike = () => setLiked((prev) => !prev);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({
+      id,
+      title,
+      price,
+      image,
+      quantity: 1,
+    });
+
+    // Show the notification
+    setShowNotif(true);
+    setTimeout(() => setShowNotif(false), 2000);
+  };
 
   return (
     <div
       className={clsx(
-        'w-full h-full p-4 flex flex-col justify-between rounded-2xl shadow-md border border-gray-200 bg-white',
+        'relative w-full h-full p-4 flex flex-col justify-between rounded-2xl shadow-md border border-gray-200 bg-white',
         className
       )}
     >
+      {/* Notification */}
+      {showNotif && (
+        <div className='absolute top-2 left-2 bg-green-100 text-green-700 text-xs px-3 py-1 rounded-md shadow z-10 animate-fadeInOut'>
+          Added to cart!
+        </div>
+      )}
+
       {/* Product Image */}
       <div className='relative w-full aspect-square mb-4 rounded-lg overflow-hidden flex justify-center items-center'>
         <Link href={`/product/${id}`} className='w-full h-full'>
@@ -82,11 +105,11 @@ const ProductCard = ({
           ₦{price.toFixed(2)}
         </span>
         <Button
-          onClick={onBuy}
+          onClick={handleAddToCart}
           variant='primary'
           className='px-3 py-1 rounded-full text-xs sm:text-sm font-medium'
         >
-          Buy now
+          Add to Cart
         </Button>
       </div>
     </div>

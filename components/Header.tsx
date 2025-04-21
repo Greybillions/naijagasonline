@@ -6,12 +6,15 @@ import Link from 'next/link';
 import { images } from '@/constants/images';
 import { link } from '@/constants';
 import { HiOutlineMenuAlt3, HiOutlineX } from 'react-icons/hi';
+import { FiShoppingCart } from 'react-icons/fi';
+import { useCart } from '@/contexts/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { cart } = useCart();
 
   return (
-    <header className='sticky top-0 z-50 bg-primary backdrop-blur-md shadow-sm transition-all'>
+    <header className='sticky top-0 z-50 bg-primary w-full backdrop-blur-md shadow-sm transition-all'>
       <div className='flex items-center justify-between w-full h-[80px] max-w-[1300px] mx-auto px-4 md:px-6'>
         {/* Logo */}
         <Link href='/' className='flex items-center'>
@@ -39,6 +42,19 @@ const Header = () => {
 
         {/* Right side actions */}
         <div className='flex items-center gap-2 sm:gap-4'>
+          {/* Cart Icon */}
+          <Link
+            href='/cart'
+            className='relative text-white hover:text-gray-300'
+          >
+            <FiShoppingCart className='text-2xl' />
+            {cart.length > 0 && (
+              <span className='absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center'>
+                {cart.length}
+              </span>
+            )}
+          </Link>
+
           {/* Hamburger Menu Icon - mobile only */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -66,6 +82,14 @@ const Header = () => {
               {item.title}
             </Link>
           ))}
+          <Link
+            href='/cart'
+            className='text-white text-base transition flex items-center gap-2'
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <FiShoppingCart className='text-lg' />
+            Cart ({cart.length})
+          </Link>
         </div>
       )}
     </header>
