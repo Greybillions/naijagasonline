@@ -3,6 +3,11 @@
 @import 'tailwindcss';
 @import 'keen-slider/keen-slider.min.css';
 
+@import 'swiper/css';
+@import 'swiper/css/pagination';
+@import 'swiper/css/autoplay';
+@import 'swiper/css/effect-fade';
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

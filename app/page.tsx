@@ -6,6 +6,7 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Banner from '@/components/Banner';
 import Header from '@/components/Header';
+import RiderCarousel from '@/components/RiderCarousel';
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <Hero />
       <Product />
       <About />
+      <RiderCarousel />
       <Banner />
       <Contact />
       <Footer />
