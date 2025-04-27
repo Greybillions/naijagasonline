@@ -42,7 +42,6 @@ const ProductCard = ({
       quantity: 1,
     });
 
-    // Show the notification
     setShowNotif(true);
     setTimeout(() => setShowNotif(false), 2000);
   };
@@ -72,6 +71,12 @@ const ProductCard = ({
           />
         </Link>
 
+        {/* Watermark */}
+        <div className='absolute bottom-2 right-2 bg-white/70 text-black text-[10px] sm:text-xs font-bold px-2 py-1 rounded-md'>
+          GasOnline
+        </div>
+
+        {/* Like Button */}
         <button
           onClick={toggleLike}
           className='absolute top-2 right-2 bg-white p-1 rounded-full shadow'

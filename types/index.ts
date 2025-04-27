@@ -40,9 +40,7 @@ export type Order = {
   phone: number;
   price: number;
   status: string;
-  state: string;
-  city: string;
-  home_address: string;
+  address: string;
   delivery_option: string;
   created_at: string;
 };

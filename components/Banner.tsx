@@ -58,12 +58,13 @@ const Banner = () => {
             Designed for safety, crafted with style. Premium gas delivery at
             your doorstep.
           </p>
-          <motion.button
+          <motion.a
             variants={item}
-            className='mt-4 w-fit bg-primary text-white font-medium py-3 px-6 rounded-full transition'
+            href='#shop'
+            className='mt-6 inline-block bg-primary text-white font-semibold py-3 px-8 rounded-full transition hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary'
           >
             Shop Now
-          </motion.button>
+          </motion.a>
         </motion.div>
       </motion.div>
     </section>

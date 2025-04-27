@@ -150,7 +150,9 @@ const Footer = () => {
 
       {/* Bottom bar */}
       <div className='mt-10 border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500'>
-        <p>Copyright © 2025 NaijaGasOnline All Rights Reserved.</p>
+        <p className='text-center'>
+          Copyright © 2025 NaijaGasOnline All Rights Reserved.
+        </p>
         <a href='#' className='underline mt-2 md:mt-0'>
           Privacy Policy
         </a>

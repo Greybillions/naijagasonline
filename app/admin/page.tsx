@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/config/supabaseClient.config';
 import Image from 'next/image';
 import Link from 'next/link';
-
 import {
   Product,
   User,
@@ -14,7 +13,6 @@ import {
   Order,
   ContactForm,
 } from '@/types';
-
 import { exportToCSV } from '@/utils/export';
 
 const AdminPage = () => {
@@ -37,6 +35,10 @@ const AdminPage = () => {
     | 'newsletter_subscribers'
     | 'contact_forms'
   >('products');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const isAdmin = localStorage.getItem('isAdmin');
@@ -55,38 +57,30 @@ const AdminPage = () => {
         const { data, error } = await supabase.from('products').select('*');
         if (!error && data) setProducts(data);
       }
-
       if (activeTab === 'users') {
         const { data, error } = await supabase
           .from('join_requests')
           .select('*');
         if (!error && data) setUsers(data);
       }
-
       if (activeTab === 'orders') {
         const { data, error } = await supabase.from('orders').select('*');
         if (!error && data) setOrders(data);
       }
-
       if (activeTab === 'join_requests') {
         const { data, error } = await supabase
           .from('join_requests')
           .select('*');
         if (!error && data) setJoinRequests(data);
       }
-
       if (activeTab === 'newsletter_subscribers') {
         const { data, error } = await supabase
           .from('newsletter_subscribers')
           .select('*');
         if (!error && data) setNewsletterSubscribers(data);
       }
-
       if (activeTab === 'contact_forms') {
-        const { data, error } = await supabase
-          .from('contact_form')
-          .select('*')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.from('contact_form').select('*');
         if (!error && data) setContactForms(data);
       }
 
@@ -96,10 +90,23 @@ const AdminPage = () => {
     fetchData();
   }, [isAdmin, activeTab]);
 
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase.from('products').delete().eq('id', id);
+  const confirmDelete = (id: string) => {
+    setSelectedProductId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedProductId) return;
+
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', selectedProductId);
+
     if (!error) {
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      setProducts((prev) => prev.filter((p) => p.id !== selectedProductId));
+      setShowDeleteModal(false);
+      setSelectedProductId(null);
     } else {
       alert('Failed to delete product.');
     }
@@ -180,6 +187,7 @@ const AdminPage = () => {
       </div>
 
       <div>
+        {/* Products */}
         {activeTab === 'products' && (
           <div>
             <Link
@@ -189,63 +197,75 @@ const AdminPage = () => {
               Add New Product
             </Link>
             <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
-              {products.length === 0 && <p>No products found.</p>}
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className='p-4 border rounded flex md:flex-col items-center justify-between'
-                >
-                  <div className='flex md:flex-col items-center gap-4'>
-                    {product.image && (
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        width={80}
-                        height={80}
-                        className='rounded object-cover'
-                      />
-                    )}
-                    <div>
-                      <h2 className='font-semibold text-lg'>{product.title}</h2>
-                      <p className='text-orange-600 font-medium'>
-                        ₦{product.price.toLocaleString()}
-                      </p>
+              {products.length === 0 ? (
+                <p>No products found.</p>
+              ) : (
+                products.map((product, index) => (
+                  <div
+                    key={product.id}
+                    className='p-4 border rounded flex md:flex-col items-center justify-between'
+                  >
+                    <div className='flex md:flex-col items-center gap-4'>
+                      <span className='font-bold text-gray-500'>
+                        {index + 1}.
+                      </span>
+                      {product.image && (
+                        <Image
+                          src={product.image}
+                          alt={product.title}
+                          width={80}
+                          height={80}
+                          className='rounded object-cover'
+                        />
+                      )}
+                      <div>
+                        <h2 className='font-semibold text-lg'>
+                          {product.title}
+                        </h2>
+                        <p className='text-orange-600 font-medium'>
+                          ₦{product.price.toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className='flex flex-col gap-3'>
+                      <Link
+                        href={`/admin/edit/${product.id}`}
+                        className='text-blue-600 hover:underline'
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={() => confirmDelete(product.id)}
+                        className='text-red-500 hover:underline'
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
-                  <div className='flex gap-3'>
-                    <Link
-                      href={`/admin/edit/${product.id}`}
-                      className='text-blue-600 hover:underline'
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className='text-red-500 hover:underline'
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         )}
-        {/* orders */}
+
+        {/* Orders */}
         {activeTab === 'orders' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {orders.length === 0 ? (
               <p>No orders found.</p>
             ) : (
-              orders.map((order) => (
+              orders.map((order, index) => (
                 <div
                   key={order.id}
                   className='p-4 border rounded flex justify-between items-center'
                 >
                   <div>
+                    <span className='font-bold text-gray-500'>
+                      {index + 1}.
+                    </span>
                     <p className='font-semibold text-lg'>{order.full_name}</p>
                     <p className='text-sm text-gray-700'>
-                      email: {order.email}
+                      Email: {order.email}
                     </p>
                     <p className='text-sm'>Kg: {order.kg}</p>
                     <p className='text-sm'>
@@ -253,15 +273,12 @@ const AdminPage = () => {
                     </p>
                     <p className='text-sm'>📞 {order.phone}</p>
                     <p className='text-sm'>
-                      {order.city}, {order.state}
-                    </p>
-                    <p className='text-sm'>
-                      Order Date:
+                      Order Date:{' '}
                       {new Date(order.created_at).toLocaleDateString()}
                     </p>
-                    <p className='text-sm'>Address: {order.home_address}</p>
+                    <p className='text-sm'>Address: {order.address}</p>
                     <p className='text-sm'>
-                      Delivery Option: {order.delivery_option}{' '}
+                      Delivery Option: {order.delivery_option}
                     </p>
                   </div>
                   <div className='text-right'>
@@ -275,18 +292,21 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* users */}
+        {/* Users */}
         {activeTab === 'users' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {users.length === 0 ? (
               <p>No users found.</p>
             ) : (
-              users.map((user) => (
+              users.map((user, index) => (
                 <div
                   key={user.id}
                   className='p-4 border rounded flex justify-between items-center'
                 >
                   <div>
+                    <span className='font-bold text-gray-500'>
+                      {index + 1}.
+                    </span>
                     <p className='font-semibold text-lg'>{user.seller_name}</p>
                     <p className='text-sm text-gray-700'>{user.email}</p>
                     <p className='text-sm'>📞 {user.phone}</p>
@@ -301,14 +321,16 @@ const AdminPage = () => {
             )}
           </div>
         )}
-        {/* join requests */}
+
+        {/* Join Requests */}
         {activeTab === 'join_requests' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {joinRequests.length === 0 ? (
               <p>No join requests.</p>
             ) : (
-              joinRequests.map((req) => (
+              joinRequests.map((req, index) => (
                 <div key={req.id} className='p-4 border rounded'>
+                  <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='font-semibold text-lg'>{req.full_name}</p>
                   <p className='text-sm text-gray-700'>{req.email}</p>
                   <p className='text-sm'>📞 {req.phone}</p>
@@ -322,14 +344,16 @@ const AdminPage = () => {
             )}
           </div>
         )}
-        {/* newsletter subscribers */}
+
+        {/* Newsletter Subscribers */}
         {activeTab === 'newsletter_subscribers' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {newsletterSubscribers.length === 0 ? (
               <p>No subscribers yet.</p>
             ) : (
-              newsletterSubscribers.map((sub) => (
+              newsletterSubscribers.map((sub, index) => (
                 <div key={sub.id} className='p-4 border rounded'>
+                  <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='text-sm'>{sub.email}</p>
                 </div>
               ))
@@ -337,14 +361,15 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* contact form submissions */}
+        {/* Contact Form Submissions */}
         {activeTab === 'contact_forms' && (
           <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
             {contactForms.length === 0 ? (
               <p>No contact form submissions yet.</p>
             ) : (
-              contactForms.map((item) => (
+              contactForms.map((item, index) => (
                 <div key={item.id} className='p-4 border rounded'>
+                  <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='font-semibold text-lg'>{item.full_name}</p>
                   <p className='text-sm text-gray-700'>Email: {item.email}</p>
                   <p className='text-sm'>
@@ -373,6 +398,31 @@ const AdminPage = () => {
           </div>
         )}
       </div>
+      {showDeleteModal && (
+        <div className='fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50'>
+          <div className='bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm text-center'>
+            <h2 className='text-lg font-semibold mb-4'>Confirm Deletion</h2>
+            <p className='text-sm text-gray-600 mb-6'>
+              Are you sure you want to delete this product? This action cannot
+              be undone.
+            </p>
+            <div className='flex justify-center gap-4'>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className='px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-sm font-medium'
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className='px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white text-sm font-medium'
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

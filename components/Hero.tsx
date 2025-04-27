@@ -45,7 +45,7 @@ const Hero = () => {
       />
 
       {/* Dark overlay */}
-      <div className='absolute inset-0 bg-black/40 z-[1]' />
+      <div className='absolute inset-0 bg-black/60 z-[1]' />
 
       <div className='h-[1px] w-full bg-gray-300' />
 

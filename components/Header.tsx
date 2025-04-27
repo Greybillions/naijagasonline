@@ -24,6 +24,9 @@ const Header = () => {
             width={200}
             height={200}
             className='object-contain'
+            placeholder='blur' // 👈 Enable blur loading
+            blurDataURL='/placeholder.png' // 👈 Tiny placeholder (optional, fallback)
+            priority // 👈 Load logo early (good for UX)
           />
         </Link>
 
@@ -55,7 +58,7 @@ const Header = () => {
             )}
           </Link>
 
-          {/* Hamburger Menu Icon - mobile only */}
+          {/* Hamburger Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className='lg:hidden p-2 rounded-md text-white transition'
