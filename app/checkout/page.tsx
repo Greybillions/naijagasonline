@@ -1,24 +1,59 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
+import FlutterwavePayment from '@/components/FlutterwaveButton';
+import { supabase } from '@/config/supabaseClient.config';
 
 const CheckoutPage = () => {
   const { cart } = useCart();
-
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const [loading, setLoading] = useState(true);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const txRef = useMemo(() => `naijagas-${Date.now()}`, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 700);
+    const timer = setTimeout(() => setLoading(false), 700);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSuccessfulPayment = async (txRef: string) => {
+    const product = cart.map((item) => ({
+      name: item.title,
+      kg: item.kg || '',
+      price: item.price,
+      quantity: item.quantity,
+      total: item.price * item.quantity,
+    }));
+
+    const { error } = await supabase.from('cart_order').insert([
+      {
+        name,
+        email,
+        phonenumber: phone,
+        address,
+        product,
+        tx_ref: txRef,
+      },
+    ]);
+
+    if (error) {
+      console.error('Supabase insert failed:', error.message);
+      alert(
+        'Something went wrong saving your order. Please try again or contact support.'
+      );
+    } else {
+      console.log('✅ Order saved with tx_ref:', txRef);
+    }
+  };
 
   return (
     <div className='bg-gray-50 min-h-screen flex flex-col'>
@@ -57,7 +92,7 @@ const CheckoutPage = () => {
           <>
             {cart.length === 0 ? (
               <p className='text-center text-gray-600'>
-                Your cart is empty.
+                Your cart is empty.{' '}
                 <Link href='/' className='text-primary font-semibold'>
                   Go back to shopping
                 </Link>
@@ -67,7 +102,6 @@ const CheckoutPage = () => {
                 {/* Cart Summary */}
                 <div className='bg-white p-6 rounded-lg shadow'>
                   <h2 className='text-2xl font-semibold mb-4'>Order Summary</h2>
-
                   <div className='divide-y divide-gray-200'>
                     {cart.map((item, index) => (
                       <div
@@ -90,8 +124,6 @@ const CheckoutPage = () => {
                       </div>
                     ))}
                   </div>
-
-                  {/* Total */}
                   <div className='flex justify-between mt-6 pt-4 border-t'>
                     <span className='font-semibold text-gray-700'>Total</span>
                     <span className='font-bold text-green-600 text-xl'>
@@ -100,16 +132,59 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
-                {/* Payment Section */}
+                {/* User Info & Payment */}
                 <div className='bg-white p-6 rounded-lg shadow'>
-                  <h2 className='text-2xl font-semibold mb-4'>Payment</h2>
-                  <p className='text-gray-600 mb-4'>
-                    Select payment method at delivery.
-                  </p>
+                  <h2 className='text-2xl font-semibold mb-4'>Customer Info</h2>
+                  <div className='grid gap-4'>
+                    <input
+                      type='text'
+                      placeholder='Full Name'
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    />
+                    <input
+                      type='email'
+                      placeholder='Email Address'
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    />
+                    <textarea
+                      placeholder='Home Address'
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    />
+                    <input
+                      type='number'
+                      placeholder='Phone Number'
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    />
+                  </div>
 
-                  <button className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition'>
-                    Confirm Order
-                  </button>
+                  {name && email && address && phone ? (
+                    <div className='mt-6'>
+                      <FlutterwavePayment
+                        amount={total}
+                        name={name}
+                        email={email}
+                        phone={phone}
+                        txRef={txRef}
+                        onSuccess={(ref) => handleSuccessfulPayment(ref)}
+                      />
+                    </div>
+                  ) : (
+                    <p className='text-sm text-gray-500 mt-4'>
+                      Fill in your details to continue to payment.
+                    </p>
+                  )}
                 </div>
               </div>
             )}

@@ -12,6 +12,7 @@ import {
 import Image from 'next/image';
 import { images } from '@/constants/images';
 import { supabase } from '@/config/supabaseClient.config';
+import Link from 'next/link';
 
 const iconMap: Record<string, JSX.Element> = {
   facebook: <FaFacebookF />,
@@ -136,10 +137,10 @@ const Footer = () => {
               </h4>
               <ul className='space-y-2'>
                 {links.map((link) => (
-                  <li key={link}>
-                    <a href='#' className='hover:text-orange-500'>
-                      {link}
-                    </a>
+                  <li key={link.label}>
+                    <Link href={link.href} className='hover:text-orange-500'>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -153,9 +154,9 @@ const Footer = () => {
         <p className='text-center'>
           Copyright © 2025 NaijaGasOnline All Rights Reserved.
         </p>
-        <a href='#' className='underline mt-2 md:mt-0'>
+        <Link href='#' className='underline mt-2 md:mt-0'>
           Privacy Policy
-        </a>
+        </Link>
       </div>
     </footer>
   );

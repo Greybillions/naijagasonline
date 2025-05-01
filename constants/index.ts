@@ -106,17 +106,13 @@ export const servicePoints = [
 
 // constants/footer.ts
 export const footerLinks = {
-  about: ['Company', 'Leadership', 'Press', 'Careers'],
-  help: ['Help Center', 'Support Team', 'Community', 'FAQs'],
-  product: [
-    'Overview',
-    'Business Account',
-    'Credit Card',
-    'Financial Modelling',
+  about: [
+    { label: 'Company', href: '/about/company' },
+    { label: 'Leadership', href: '/about/leadership' },
+    { label: 'Press', href: '/about/press' },
+    { label: 'Careers', href: '/about/careers' },
   ],
-  company: ['About NaijaGasOnline', 'Contact', 'News & Blogs'],
 };
-
 export const socialIcons = [
   { icon: 'facebook', url: '' },
   { icon: 'youtube', url: '#' },
