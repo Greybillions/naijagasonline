@@ -17,6 +17,7 @@ const CheckoutPage = () => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState('');
 
   const txRef = useMemo(() => `naijagas-${Date.now()}`, []);
 
@@ -42,6 +43,7 @@ const CheckoutPage = () => {
         address,
         product,
         tx_ref: txRef,
+        delivery_method: deliveryMethod, // ✅ Include delivery method
       },
     ]);
 
@@ -167,6 +169,18 @@ const CheckoutPage = () => {
                       className='border rounded p-3 w-full'
                       required
                     />
+
+                    {/* ✅ Delivery Option Input */}
+                    <select
+                      value={deliveryMethod}
+                      onChange={(e) => setDeliveryMethod(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    >
+                      <option value=''>Select Delivery Option</option>
+                      <option value='doorstep'>Doorstep Delivery</option>
+                      <option value='pickup'>Pickup</option>
+                    </select>
                   </div>
 
                   {name && email && address && phone ? (

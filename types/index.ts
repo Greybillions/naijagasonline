@@ -56,3 +56,24 @@ export type ContactForm = {
   city?: string;
   created_at: string;
 };
+
+// ✅ Declare this BEFORE using it
+export type CartProductItem = {
+  name: string;
+  kg: string;
+  price: number;
+  quantity: number;
+  total: number;
+};
+
+export type CartOrder = {
+  id?: string;
+  name: string;
+  email: string;
+  phonenumber: string;
+  address: string;
+  delivery_method: string;
+  tx_ref: string;
+  product: CartProductItem[];
+  created_at?: string;
+};

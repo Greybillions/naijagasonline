@@ -1,22 +1,28 @@
 'use client';
 
 import React from 'react';
-import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
 
 interface FlutterwaveProps {
   amount: number;
   name: string;
   email: string;
   phone: string;
-  txRef: string; // ✅ receive tx_ref from parent
-  onSuccess: (txRef: string) => void; // ✅ pass it back on success
+  txRef: string;
+  onSuccess: (txRef: string) => void;
 }
 
 interface FlutterwaveResponse {
-  success: boolean;
+  status: string;
   transaction_id: number;
   tx_ref: string;
-  status: string;
+  [key: string]: unknown;
+}
+
+// Declare FlutterwaveCheckout on window
+declare global {
+  interface Window {
+    FlutterwaveCheckout: (options: Record<string, unknown>) => void;
+  }
 }
 
 const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
@@ -27,44 +33,60 @@ const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
   txRef,
   onSuccess,
 }) => {
-  const config = {
-    public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
-    tx_ref: txRef, // ✅ use passed tx_ref
-    amount,
-    currency: 'NGN',
-    payment_options: 'card, banktransfer, ussd',
-    customer: {
-      email,
-      phonenumber: phone,
-      name,
-    },
-    customizations: {
-      title: 'NaijaGasOnline',
-      description: 'Payment for gas order',
-      logo: 'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/product-images/logo/cropped_image.png',
-      email: 'naijagasonline@gmail.com',
-    },
+  const handlePayment = () => {
+    if (!document.querySelector('#flutterwave-checkout-script')) {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.flutterwave.com/v3.js';
+      script.id = 'flutterwave-checkout-script';
+      script.async = true;
+      document.body.appendChild(script);
+
+      script.onload = triggerCheckout;
+    } else {
+      triggerCheckout();
+    }
   };
 
-  const fwConfig = {
-    ...config,
-    text: 'Pay with Flutterwave',
-    callback: (response: FlutterwaveResponse) => {
-      console.log('Payment successful!', response);
-      closePaymentModal();
-      onSuccess(txRef); // ✅ pass tx_ref back to caller
-      window.location.href = `/payment-success?tx_ref=${txRef}`; // ✅ append to URL
-    },
-    onClose: () => {
-      console.log('Payment closed');
-    },
+  const triggerCheckout = () => {
+    window.FlutterwaveCheckout({
+      public_key: process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY!,
+      tx_ref: txRef,
+      amount,
+      currency: 'NGN',
+      payment_options: 'card, banktransfer, ussd',
+      customer: {
+        email,
+        phonenumber: phone,
+        name,
+      },
+      customizations: {
+        title: 'NaijaGasOnline',
+        description: 'Payment for gas order',
+        logo: 'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/product-images/logo/cropped_image.png',
+      },
+      callback: (response: FlutterwaveResponse) => {
+        console.log('Flutterwave response:', response);
+
+        if (['successful', 'completed'].includes(response.status)) {
+          onSuccess(response.tx_ref);
+          window.location.href = `/payment-success?tx_ref=${response.tx_ref}`;
+        } else {
+          console.warn(`❌ Payment not successful. Status: ${response.status}`);
+        }
+      },
+      onclose: () => {
+        console.log('💬 Flutterwave payment modal closed by user');
+      },
+    });
   };
 
   return (
-    <FlutterWaveButton
+    <button
+      onClick={handlePayment}
       className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition'
-      {...fwConfig}
-    />
+    >
+      Pay with Flutterwave
+    </button>
   );
 };
 

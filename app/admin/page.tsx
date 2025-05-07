@@ -12,6 +12,7 @@ import {
   NewsletterSubscriber,
   Order,
   ContactForm,
+  CartOrder,
 } from '@/types';
 import { exportToCSV } from '@/utils/export';
 
@@ -26,15 +27,18 @@ const AdminPage = () => {
   >([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [contactForms, setContactForms] = useState<ContactForm[]>([]);
+  const [cartOrder, setCartOrder] = useState<CartOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<
     | 'products'
     | 'users'
     | 'orders'
+    | 'cart_order'
     | 'join_requests'
     | 'newsletter_subscribers'
     | 'contact_forms'
   >('products');
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
@@ -82,6 +86,10 @@ const AdminPage = () => {
       if (activeTab === 'contact_forms') {
         const { data, error } = await supabase.from('contact_form').select('*');
         if (!error && data) setContactForms(data);
+      }
+      if (activeTab === 'cart_order') {
+        const { data, error } = await supabase.from('cart_order').select('*');
+        if (!error && data) setCartOrder(data);
       }
 
       setLoading(false);
@@ -133,6 +141,8 @@ const AdminPage = () => {
         return contactForms.length;
       case 'newsletter_subscribers':
         return newsletterSubscribers.length;
+      case 'cart_order':
+        return cartOrder.length;
       default:
         return 0;
     }
@@ -142,6 +152,7 @@ const AdminPage = () => {
     products,
     users,
     orders,
+    cart_order: cartOrder,
     join_requests: joinRequests,
     newsletter_subscribers: newsletterSubscribers,
     contact_forms: contactForms,
@@ -168,6 +179,7 @@ const AdminPage = () => {
           <option value='products'>Products</option>
           <option value='users'>Users</option>
           <option value='orders'>Orders</option>
+          <option value='cart_order'>Cart Orders</option>
           <option value='join_requests'>Join Requests</option>
           <option value='newsletter_subscribers'>Newsletter Subscribers</option>
           <option value='contact_forms'>Contact Form Submissions</option>
@@ -285,6 +297,54 @@ const AdminPage = () => {
                     <span className='text-xs bg-green-100 text-shadow-green-600 px-2 py-1 rounded'>
                       {order.status}
                     </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Cart Orders */}
+        {activeTab === 'cart_order' && (
+          <div className='grid gap-4 lg:grid-cols-2 xl:grid-cols-3'>
+            {cartOrder.length === 0 ? (
+              <p>No cart orders found.</p>
+            ) : (
+              cartOrder.map((order, index) => (
+                <div
+                  key={order.tx_ref}
+                  className='p-4 border rounded flex flex-col gap-2'
+                >
+                  <span className='font-bold text-gray-500'>{index + 1}.</span>
+                  <p className='font-semibold text-lg'>Name: {order.name}</p>
+                  <p className='text-sm text-gray-700'>Email: {order.email}</p>
+                  <p className='text-sm'>📞 {order.phonenumber}</p>
+                  <p className='text-sm'>Address: {order.address}</p>
+                  <p className='text-sm'>Delivery: {order.delivery_method}</p>
+                  <p className='text-sm'>TX Ref: {order.tx_ref}</p>
+                  <p className='text-sm font-semibold'>
+                    Total: ₦
+                    {order.product
+                      ?.reduce((sum, item) => {
+                        const total =
+                          typeof item.total === 'number' ? item.total : 0;
+                        return sum + total;
+                      }, 0)
+                      .toLocaleString()}
+                  </p>
+                  <div className='mt-2'>
+                    <p className='font-medium'>Products:</p>
+                    <ul className='list-disc list-inside text-sm text-gray-600'>
+                      {order.product.map((item, i) => (
+                        <li key={i}>
+                          {item.name} - {item.kg}kg x {item.quantity} = ₦
+                          {(typeof item.total === 'number'
+                            ? item.total
+                            : 0
+                          ).toLocaleString()}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               ))
