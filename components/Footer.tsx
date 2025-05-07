@@ -103,7 +103,7 @@ const Footer = () => {
 
           <p className='text-xs text-gray-500 mt-2'>
             By subscribing you agree to our{' '}
-            <a href='#' className='underline'>
+            <a href='/privacy' className='underline'>
               Privacy Policy
             </a>
             .
@@ -154,7 +154,7 @@ const Footer = () => {
         <p className='text-center'>
           Copyright © 2025 NaijaGasOnline All Rights Reserved.
         </p>
-        <Link href='#' className='underline mt-2 md:mt-0'>
+        <Link href='/privacy' className='underline mt-2 md:mt-0'>
           Privacy Policy
         </Link>
       </div>
