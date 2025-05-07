@@ -15,6 +15,7 @@ type ProductCardProps = {
   price: number;
   rating: number;
   image: string;
+  kg?: string; // ✅ Add optional kg for typing
   className?: string;
 };
 
@@ -25,6 +26,7 @@ const ProductCard = ({
   price,
   rating,
   image,
+  kg = '0', // ✅ Default to '0' if not provided
   className,
 }: ProductCardProps) => {
   const [liked, setLiked] = useState(false);
@@ -39,7 +41,8 @@ const ProductCard = ({
       title,
       price,
       image,
-      quantity: 1,
+      quantity: 1, // ✅ Assuming 1 by default unless dynamic
+      kg,
     });
 
     setShowNotif(true);
