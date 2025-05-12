@@ -10,7 +10,6 @@ import { NigerianCities } from '@/constants';
 const JoinUs = () => {
   const [formData, setFormData] = useState({
     fullName: '',
-    email: '',
     phone: '',
     role: '',
     state: '',
@@ -39,7 +38,6 @@ const JoinUs = () => {
     const { data, error } = await supabase.from('join_requests').insert([
       {
         full_name: formData.fullName,
-        email: formData.email,
         phone: formData.phone,
         role: formData.role,
         state: formData.state,
@@ -54,7 +52,6 @@ const JoinUs = () => {
       console.log('Submitted data:', data);
       setFormData({
         fullName: '',
-        email: '',
         phone: '',
         role: '',
         state: '',
@@ -105,16 +102,6 @@ const JoinUs = () => {
           />
 
           <input
-            name='email'
-            type='email'
-            value={formData.email}
-            onChange={handleChange}
-            placeholder='Email Address'
-            className='border border-gray-300 px-4 py-2 rounded-md text-sm w-full'
-            required
-          />
-
-          <input
             name='phone'
             type='tel'
             value={formData.phone}
@@ -140,7 +127,7 @@ const JoinUs = () => {
             <option value='Logistics'>Logistic Outfit</option>
           </select>
 
-          {/* Updated State and City dropdowns */}
+          {/* State and City dropdowns */}
           <select
             name='state'
             value={formData.state}

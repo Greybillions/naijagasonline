@@ -10,7 +10,6 @@ export type Product = {
 export type User = {
   id: string;
   seller_name: string;
-  email: string;
   phone: string;
   state: string;
   city: string;
@@ -19,7 +18,6 @@ export type User = {
 export type JoinRequest = {
   id: string;
   full_name: string;
-  email: string;
   phone: string;
   state: string;
   city: string;
@@ -35,20 +33,20 @@ export type NewsletterSubscriber = {
 export type Order = {
   id: string;
   full_name: string;
-  email: string;
   kg: number;
   phone: number;
   price: number;
   status: string;
-  address: string;
+  address?: string;
   delivery_option: string;
   created_at: string;
+  state: string;
+  city: string;
 };
 
 export type ContactForm = {
   id: string;
   full_name: string;
-  email: string;
   message: string;
   gas_info?: string;
   image_url?: string;
@@ -69,7 +67,6 @@ export type CartProductItem = {
 export type CartOrder = {
   id?: string;
   name: string;
-  email: string;
   phonenumber: string;
   address: string;
   delivery_method: string;

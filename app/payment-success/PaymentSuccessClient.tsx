@@ -15,13 +15,13 @@ interface ProductItem {
 
 interface Order {
   name: string;
-  email: string;
   phonenumber: string;
   address: string;
   tx_ref: string;
   product: ProductItem[];
   created_at?: string;
   delivery_method: string;
+  payment_mode?: string; // ✅ Added payment mode
 }
 
 const PaymentSuccessClient = () => {
@@ -93,11 +93,15 @@ const PaymentSuccessClient = () => {
                 <strong>Delivery Option:</strong> {order.delivery_method}
               </p>
               <p>
-                <strong>Name:</strong> {order.name}
+                <strong>Payment Mode:</strong>{' '}
+                {order.payment_mode === 'easy-buy'
+                  ? 'Easy Buy'
+                  : 'One time Payment'}
               </p>
               <p>
-                <strong>Email:</strong> {order.email}
+                <strong>Name:</strong> {order.name}
               </p>
+
               <p>
                 <strong>Phone:</strong> {order.phonenumber}
               </p>
@@ -120,6 +124,7 @@ const PaymentSuccessClient = () => {
                 ))}
               </ul>
             </div>
+
             <p className='mt-4 text-lg font-semibold text-gray-800 text-center'>
               Total Amount: ₦
               {order.product

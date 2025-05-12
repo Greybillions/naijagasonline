@@ -5,10 +5,10 @@ import React from 'react';
 interface FlutterwaveProps {
   amount: number;
   name: string;
-  email: string;
   phone: string;
   txRef: string;
   onSuccess: (txRef: string) => void;
+  paymentMode?: string; // optional for now, used for labeling
 }
 
 interface FlutterwaveResponse {
@@ -28,10 +28,10 @@ declare global {
 const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
   amount,
   name,
-  email,
   phone,
   txRef,
   onSuccess,
+  paymentMode = 'one-time',
 }) => {
   const handlePayment = () => {
     if (!document.querySelector('#flutterwave-checkout-script')) {
@@ -40,7 +40,6 @@ const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
       script.id = 'flutterwave-checkout-script';
       script.async = true;
       document.body.appendChild(script);
-
       script.onload = triggerCheckout;
     } else {
       triggerCheckout();
@@ -55,13 +54,14 @@ const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
       currency: 'NGN',
       payment_options: 'card, banktransfer, ussd',
       customer: {
-        email,
         phonenumber: phone,
         name,
       },
       customizations: {
         title: 'NaijaGasOnline',
-        description: 'Payment for gas order',
+        description: `Payment for gas order (${
+          paymentMode === 'easy-buy' ? 'Easy Buy' : 'One time'
+        })`,
         logo: 'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/product-images/logo/cropped_image.png',
       },
       callback: (response: FlutterwaveResponse) => {
@@ -85,7 +85,9 @@ const FlutterwavePayment: React.FC<FlutterwaveProps> = ({
       onClick={handlePayment}
       className='w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition'
     >
-      Pay with Flutterwave
+      {paymentMode === 'easy-buy'
+        ? 'Proceed with Easy Buy'
+        : 'Pay with Flutterwave'}
     </button>
   );
 };

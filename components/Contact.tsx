@@ -11,7 +11,6 @@ const Contact = () => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     full_name: '',
-    email: '',
     message: '',
     gas_info: '',
     state: '',
@@ -44,7 +43,7 @@ const Contact = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === 'state' && { city: '' }), // reset city if state changes
+      ...(name === 'state' && { city: '' }),
     }));
   };
 
@@ -58,6 +57,7 @@ const Contact = () => {
       const fileName = `${Date.now()}-${Math.random()
         .toString(36)
         .substr(2, 9)}.${fileExt}`;
+
       const { error: uploadError } = await supabase.storage
         .from('contact')
         .upload(`contact-images/${fileName}`, imageFile);
@@ -79,7 +79,6 @@ const Contact = () => {
       .insert([
         {
           full_name: formData.full_name,
-          email: formData.email,
           message: formData.message,
           gas_info: formData.gas_info,
           image_url: image_url,
@@ -94,10 +93,9 @@ const Contact = () => {
       alert('Failed to submit. Please try again. ' + error.message);
       console.error('Error:', error);
     } else {
-      setShowModal(true); // show success modal
+      setShowModal(true);
       setFormData({
         full_name: '',
-        email: '',
         message: '',
         gas_info: '',
         state: '',
@@ -135,22 +133,13 @@ const Contact = () => {
           </div>
 
           <form onSubmit={handleSubmit} className='space-y-5 w-full'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            <div className='grid grid-cols-1'>
               <input
                 type='text'
                 name='full_name'
                 placeholder='Your Name'
                 className='border border-gray-300 p-3 rounded-md w-full'
                 value={formData.full_name}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type='email'
-                name='email'
-                placeholder='Your Email'
-                className='border border-gray-300 p-3 rounded-md w-full'
-                value={formData.email}
                 onChange={handleChange}
                 required
               />

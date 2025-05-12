@@ -14,10 +14,10 @@ const CheckoutPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
+  const [paymentMode, setPaymentMode] = useState('');
 
   const txRef = useMemo(() => `naijagas-${Date.now()}`, []);
 
@@ -38,12 +38,12 @@ const CheckoutPage = () => {
     const { error } = await supabase.from('cart_order').insert([
       {
         name,
-        email,
         phonenumber: phone,
         address,
         product,
         tx_ref: txRef,
-        delivery_method: deliveryMethod, // ✅ Include delivery method
+        delivery_method: deliveryMethod,
+        payment_mode: paymentMode,
       },
     ]);
 
@@ -146,14 +146,6 @@ const CheckoutPage = () => {
                       className='border rounded p-3 w-full'
                       required
                     />
-                    <input
-                      type='email'
-                      placeholder='Email Address'
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    />
                     <textarea
                       placeholder='Home Address'
                       value={address}
@@ -169,8 +161,6 @@ const CheckoutPage = () => {
                       className='border rounded p-3 w-full'
                       required
                     />
-
-                    {/* ✅ Delivery Option Input */}
                     <select
                       value={deliveryMethod}
                       onChange={(e) => setDeliveryMethod(e.target.value)}
@@ -181,16 +171,26 @@ const CheckoutPage = () => {
                       <option value='doorstep'>Doorstep Delivery</option>
                       <option value='pickup'>Pickup</option>
                     </select>
+                    <select
+                      value={paymentMode}
+                      onChange={(e) => setPaymentMode(e.target.value)}
+                      className='border rounded p-3 w-full'
+                      required
+                    >
+                      <option value=''>Select Payment Mode</option>
+                      <option value='one-time'>One time Payment</option>
+                      <option value='easy-buy'>Easy Buy</option>
+                    </select>
                   </div>
 
-                  {name && email && address && phone ? (
+                  {name && address && phone && paymentMode ? (
                     <div className='mt-6'>
                       <FlutterwavePayment
                         amount={total}
                         name={name}
-                        email={email}
                         phone={phone}
                         txRef={txRef}
+                        paymentMode={paymentMode}
                         onSuccess={(ref) => handleSuccessfulPayment(ref)}
                       />
                     </div>

@@ -114,14 +114,14 @@ export const footerLinks = {
   ],
 };
 export const socialIcons = [
-  { icon: 'facebook', url: '' },
-  { icon: 'youtube', url: '#' },
-  { icon: 'pinterest', url: '#' },
-  { icon: 'instagram', url: 'https://www.instagram.com/naijagasonline' },
-  { icon: 'twitter', url: '#' },
+  { icon: 'facebook', url: 'https://www.facebook.com/share/1EksvLbDzX/' },
+  {
+    icon: 'instagram',
+    url: 'https://www.instagram.com/naijagasonline?igsh=YzhueHlraDNieDNj',
+  },
 ];
 
-export const NigerianCities = {
+export const NigerianCities: Record<string, string[]> = {
   abuja: ['Abuja', 'Kuje', 'Kwali', 'Madala'],
   lagos: [
     'Apapa',

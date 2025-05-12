@@ -64,9 +64,14 @@ const Footer = () => {
           {/* Social icons */}
           <div className='flex gap-4 mt-6 text-lg text-gray-300'>
             {socialIcons.map(({ icon, url }) => (
-              <a key={icon} href={url} className='hover:text-white transition'>
+              <Link
+                key={icon}
+                href={url}
+                target='_blank'
+                className='hover:text-white transition'
+              >
                 {iconMap[icon]}
-              </a>
+              </Link>
             ))}
           </div>
         </div>

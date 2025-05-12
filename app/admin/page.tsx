@@ -276,23 +276,24 @@ const AdminPage = () => {
                       {index + 1}.
                     </span>
                     <p className='font-semibold text-lg'>{order.full_name}</p>
-                    <p className='text-sm text-gray-700'>
-                      Email: {order.email}
-                    </p>
+
                     <p className='text-sm'>Kg: {order.kg}</p>
                     <p className='text-sm'>
                       Total: ₦{order.price.toLocaleString()}
                     </p>
                     <p className='text-sm'>📞 {order.phone}</p>
+                    <p className='text-sm'>State: {order.state}</p>
+                    <p className='text-sm'>City: {order.city}</p>
                     <p className='text-sm'>
                       Order Date:{' '}
                       {new Date(order.created_at).toLocaleDateString()}
                     </p>
-                    <p className='text-sm'>Address: {order.address}</p>
+                    <p className='text-sm'>Address: {order.address || 'N/A'}</p>
                     <p className='text-sm'>
                       Delivery Option: {order.delivery_option}
                     </p>
                   </div>
+
                   <div className='text-right'>
                     <span className='text-xs bg-green-100 text-shadow-green-600 px-2 py-1 rounded'>
                       {order.status}
@@ -317,7 +318,6 @@ const AdminPage = () => {
                 >
                   <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='font-semibold text-lg'>Name: {order.name}</p>
-                  <p className='text-sm text-gray-700'>Email: {order.email}</p>
                   <p className='text-sm'>📞 {order.phonenumber}</p>
                   <p className='text-sm'>Address: {order.address}</p>
                   <p className='text-sm'>Delivery: {order.delivery_method}</p>
@@ -368,7 +368,6 @@ const AdminPage = () => {
                       {index + 1}.
                     </span>
                     <p className='font-semibold text-lg'>{user.seller_name}</p>
-                    <p className='text-sm text-gray-700'>{user.email}</p>
                     <p className='text-sm'>📞 {user.phone}</p>
                   </div>
                   <div className='text-right'>
@@ -392,7 +391,6 @@ const AdminPage = () => {
                 <div key={req.id} className='p-4 border rounded'>
                   <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='font-semibold text-lg'>{req.full_name}</p>
-                  <p className='text-sm text-gray-700'>{req.email}</p>
                   <p className='text-sm'>📞 {req.phone}</p>
                   <p className='text-sm'>Role: {req.role}</p>
                   <p className='text-sm'>
@@ -431,7 +429,6 @@ const AdminPage = () => {
                 <div key={item.id} className='p-4 border rounded'>
                   <span className='font-bold text-gray-500'>{index + 1}.</span>
                   <p className='font-semibold text-lg'>{item.full_name}</p>
-                  <p className='text-sm text-gray-700'>Email: {item.email}</p>
                   <p className='text-sm'>
                     State: {item.state}, City: {item.city}
                   </p>

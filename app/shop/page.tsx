@@ -1,31 +1,42 @@
 'use client';
 
 import React, { useState } from 'react';
-import { gasOptions } from '@/constants';
+import { gasOptions, NigerianCities } from '@/constants';
 import Products from '@/components/Product';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { supabase } from '@/config/supabaseClient.config';
 import Link from 'next/link';
-import LocationInput from '@/components/LocationInput';
 
 const ShopPage = () => {
   const [kg, setKg] = useState('');
   const [price, setPrice] = useState<number | null>(null);
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState(''); // 👈 added email
   const [phone, setPhone] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [address, setAddress] = useState('');
   const [deliveryOption, setDeliveryOption] = useState('');
   const [success, setSuccess] = useState(false);
-  const [address, setAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  const handleKgChange = (value: string) => {
+    setKg(value);
+    const selected = gasOptions.find((opt) => opt.label === value);
+    setPrice(selected?.price ?? null);
+  };
+
+  const handlePhoneChange = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '');
+    if (digitsOnly.length <= 11) setPhone(digitsOnly);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!address || !kg || !fullName || !email || !phone || !deliveryOption) {
-      alert('Please fill out all fields.');
+    if (!kg || !fullName || !phone || !state || !city || !deliveryOption) {
+      alert('Please fill out all required fields.');
       return;
     }
 
@@ -35,10 +46,11 @@ const ShopPage = () => {
       kg,
       price,
       full_name: fullName,
-      email, // 👈 added email to database
       phone,
+      state,
+      city,
+      address, // optional
       delivery_option: deliveryOption,
-      address,
     });
 
     if (error) {
@@ -56,17 +68,14 @@ const ShopPage = () => {
     setKg('');
     setPrice(null);
     setFullName('');
-    setEmail('');
     setPhone('');
-    setDeliveryOption('');
+    setState('');
+    setCity('');
     setAddress('');
+    setDeliveryOption('');
   };
 
-  const handleKgChange = (value: string) => {
-    setKg(value);
-    const selected = gasOptions.find((opt) => opt.label === value);
-    setPrice(selected?.price ?? null);
-  };
+  const cities = NigerianCities[state?.toLowerCase()] || [];
 
   return (
     <section className='w-full bg-gray-100'>
@@ -75,13 +84,8 @@ const ShopPage = () => {
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
         <h1 className='text-2xl sm:text-3xl font-bold mb-6 text-center flex items-center justify-center gap-2'>
           <HiOutlineLocationMarker className='w-6 h-6 text-primary' />
-          Where is your location?
+          Buy Gas Online
         </h1>
-
-        {/* Address Input */}
-        <div className='bg-white rounded-xl p-6 shadow mb-10'>
-          <LocationInput onAddressSelect={(addr) => setAddress(addr)} />
-        </div>
 
         {/* Form */}
         <form
@@ -137,21 +141,6 @@ const ShopPage = () => {
             />
           </div>
 
-          {/* Email */}
-          <div>
-            <label className='block mb-1 text-sm font-medium text-gray-700'>
-              Email
-            </label>
-            <input
-              type='email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
-              placeholder='Enter your email address'
-              required
-            />
-          </div>
-
           {/* Phone Number */}
           <div>
             <label className='block mb-1 text-sm font-medium text-gray-700'>
@@ -160,10 +149,67 @@ const ShopPage = () => {
             <input
               type='tel'
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => handlePhoneChange(e.target.value)}
               className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
               placeholder='Enter your phone number'
               required
+            />
+          </div>
+
+          {/* State */}
+          <div>
+            <label className='block mb-1 text-sm font-medium text-gray-700'>
+              State
+            </label>
+            <select
+              value={state}
+              onChange={(e) => {
+                setState(e.target.value);
+                setCity('');
+              }}
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
+              required
+            >
+              <option value=''>Select State</option>
+              {Object.keys(NigerianCities).map((stateKey) => (
+                <option key={stateKey} value={stateKey}>
+                  {stateKey.charAt(0).toUpperCase() + stateKey.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* City */}
+          <div>
+            <label className='block mb-1 text-sm font-medium text-gray-700'>
+              City
+            </label>
+            <select
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
+              required
+              disabled={!state}
+            >
+              <option value=''>Select City</option>
+              {cities.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Address (Optional) */}
+          <div className='sm:col-span-2'>
+            <label className='block mb-1 text-sm font-medium text-gray-700'>
+              Address (optional)
+            </label>
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className='w-full border border-gray-300 rounded-md px-3 py-2 text-sm'
+              placeholder='Street address, landmark, etc.'
             />
           </div>
 
