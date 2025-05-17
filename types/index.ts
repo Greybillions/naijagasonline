@@ -9,7 +9,7 @@ export type Product = {
 
 export type User = {
   id: string;
-  seller_name: string;
+  full_name: string;
   phone: string;
   state: string;
   city: string;
@@ -73,4 +73,5 @@ export type CartOrder = {
   tx_ref: string;
   product: CartProductItem[];
   created_at?: string;
+  status: string;
 };

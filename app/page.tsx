@@ -7,11 +7,13 @@ import Footer from '@/components/Footer';
 import Banner from '@/components/Banner';
 import Header from '@/components/Header';
 import RiderCarousel from '@/components/RiderCarousel';
+import CylinderPromo from '@/components/CylinderPromo';
 
 const Home = () => {
   return (
     <div className='flex flex-col items-center justify-center min-h-auto'>
       <Header />
+      <CylinderPromo />
       <Hero />
       <Product />
       <About />

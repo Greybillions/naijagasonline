@@ -52,3 +52,36 @@ body {
 .border-primary {
   border-color: var(--color-primary);
 }
+
+/* article */
+.article {
+  @apply flex flex-col gap-3 text-lg tracking-wide mb-20;
+}
+
+.article h1 {
+  @apply text-3xl font-bold;
+}
+.article h2 {
+  @apply text-2xl font-bold;
+}
+.article h3 {
+  @apply text-xl font-bold;
+}
+.article h4 {
+  @apply text-lg font-bold;
+}
+.article h5 {
+  @apply text-base font-bold;
+}
+
+.article h6 {
+  @apply text-sm font-bold;
+}
+
+.article > ol {
+  @apply list-decimal flex flex-col gap-2 mx-10;
+}
+
+.article > ul {
+  @apply list-disc flex flex-col gap-2 mx-10;
+}

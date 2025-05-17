@@ -8,23 +8,22 @@ import Image from 'next/image';
 const LeadershipPage = () => {
   const leaders = [
     {
-      name: 'Dr. Olamide Tom',
-      title: 'Founder & CEO',
+      name: 'Onipede Olamide J.',
+      title: 'CEO',
       image: '/team/mide.webp',
       bio: 'Dr. Olamide leads the team with a bold vision to revolutionize gas delivery in Nigeria through smart technology and people-first strategies.',
     },
     {
-      name: 'Amaka Johnson',
+      name: 'Tommy Uba Kobindi',
       title: 'Chief Operations Officer',
-      image: '/team/amaka.webp',
-      bio: 'With over a decade of experience in logistics, Amaka ensures deliveries are fast, safe, and reliable nationwide.',
-    },
-    {
-      name: 'Graham Boyle',
-      title: 'Software Engineer',
       image: '/team/grey.webp',
-      bio: 'Grey oversees the platform’s tech, ensuring that our apps are seamless, scalable, and secure.',
+      bio: 'With over a decade of experience in logistics, Tommy ensures deliveries are fast, safe, and reliable nationwide.',
     },
+  ];
+
+  const partners = [
+    { name: 'Bereeth Energy LTD', location: 'Lagos State' },
+    { name: 'BNL Services', location: 'Port Harcourt' },
   ];
 
   return (
@@ -49,7 +48,7 @@ const LeadershipPage = () => {
               <Image
                 src={leader.image}
                 alt={leader.name}
-                width={120}
+                width={150}
                 height={120}
                 className='rounded-full mx-auto mb-4 object-cover'
               />
@@ -62,6 +61,25 @@ const LeadershipPage = () => {
               <p className='text-sm text-gray-600 mt-2'>{leader.bio}</p>
             </div>
           ))}
+        </div>
+
+        <div className='mt-16'>
+          <h2 className='text-3xl font-bold text-gray-800 mb-6'>
+            Major Partners
+          </h2>
+          <ul className='space-y-4'>
+            {partners.map((partner, index) => (
+              <li
+                key={index}
+                className='bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-600'
+              >
+                <p className='text-lg font-semibold text-gray-700'>
+                  {partner.name}
+                </p>
+                <p className='text-sm text-gray-500'>{partner.location}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </main>
 
