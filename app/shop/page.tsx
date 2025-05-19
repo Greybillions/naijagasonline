@@ -253,6 +253,9 @@ const ShopPage = () => {
             <p className='font-semibold text-lg'>
               Order submitted successfully!
             </p>
+            <p className='text-sm'>
+              Our Dispatch Rider will contact you shortly.
+            </p>
             <Link
               href='/'
               className='underline text-primary font-medium mt-2 inline-block'
