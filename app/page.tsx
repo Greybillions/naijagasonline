@@ -8,6 +8,7 @@ import Banner from '@/components/Banner';
 import Header from '@/components/Header';
 import RiderCarousel from '@/components/RiderCarousel';
 import CylinderPromo from '@/components/CylinderPromo';
+import VideoTutorial from '@/components/VideoTutorial';
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <CylinderPromo />
       <Hero />
       <Product />
+      <VideoTutorial />
       <About />
       <RiderCarousel />
       <Banner />

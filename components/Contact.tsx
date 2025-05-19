@@ -124,7 +124,13 @@ const Contact = () => {
                 <strong>📞 Phone:</strong> +234 812 345 6789
               </p>
               <p>
-                <strong>📍 Address:</strong> Okporo Road, Port Harcourt, Nigeria
+                <strong>📍 Port Harcourt:</strong> Okporo Road, Nigeria
+              </p>
+              <p>
+                <strong>📍 Lagos:</strong> , Nigeria
+              </p>
+              <p>
+                <strong>📍 Abuja:</strong> , Nigeria
               </p>
               <p>
                 <strong>✉️ Email:</strong> naijagasonline@gmail.com
