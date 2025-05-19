@@ -4,6 +4,8 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import { supabase } from '@/config/supabaseClient.config';
 import { NigerianCities } from '@/constants';
+import { FaBuilding, FaClock, FaMapPin, FaPhone } from 'react-icons/fa';
+import { FiMail } from 'react-icons/fi';
 
 const Contact = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -119,22 +121,87 @@ const Contact = () => {
               We are here to help with your gas delivery, product inquiries, or
               business partnerships.
             </p>
-            <div className='space-y-2'>
-              <p>
-                <strong>📞 Phone:</strong> +234 812 345 6789
-              </p>
-              <p>
-                <strong>📍 Port Harcourt:</strong> Okporo Road, Nigeria
-              </p>
-              <p>
-                <strong>📍 Lagos:</strong> , Nigeria
-              </p>
-              <p>
-                <strong>📍 Abuja:</strong> , Nigeria
-              </p>
-              <p>
-                <strong>✉️ Email:</strong> naijagasonline@gmail.com
-              </p>
+            {/* Contact Methods */}
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div className='flex items-center p-3 bg-gray-50 rounded-lg border-l-4 border-primary'>
+                <div className='bg-primary bg-opacity-10 p-2 rounded-full mr-3'>
+                  <FaPhone className='h-5 w-5 text-white' />
+                </div>
+                <div>
+                  <div className='text-sm text-gray-500'>Phone</div>
+                  <div className='font-medium'>+234 906 563 5394</div>
+                </div>
+              </div>
+
+              <div className='flex items-center p-3 bg-gray-50 rounded-lg border-l-4 border-primary'>
+                <div className='bg-primary bg-opacity-10 p-2 rounded-full mr-3'>
+                  <FiMail className='h-5 w-5 text-white' />
+                </div>
+                <div>
+                  <div className='text-sm text-gray-500'>Email</div>
+                  <div className='font-medium'>naijagasonline@gmail.com</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Locations */}
+            <div className='pt-4'>
+              <h3 className='text-lg font-semibold mb-4 flex items-center'>
+                <FaMapPin className='h-5 w-5 mr-2 text-primary' />
+                Our Locations
+              </h3>
+
+              <div className='space-y-4'>
+                {/* Port Harcourt */}
+                <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow'>
+                  <div className='flex items-start'>
+                    <FaBuilding className='h-5 w-5 text-primary mr-3 mt-1' />
+                    <div>
+                      <h4 className='font-medium text-gray-900'>
+                        Port Harcourt
+                      </h4>
+                      <p className='text-gray-600 mt-1'>
+                        New Base Plaza, No. 3 Road 3, Eliokodu, SARS Road, River
+                        State Nigeria
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Lagos */}
+                <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow'>
+                  <div className='flex items-start'>
+                    <FaBuilding className='h-5 w-5 text-primary mr-3 mt-1' />
+                    <div>
+                      <h4 className='font-medium text-gray-900'>Lagos</h4>
+                      <p className='text-gray-600 mt-1'>
+                        Shop 223 SkyMall Building, Sangotedo, Lekki-Epe
+                        Expressway, Lagos State, Nigeria
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Abuja */}
+                <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow'>
+                  <div className='flex items-start'>
+                    <FaBuilding className='h-5 w-5 text-primary mr-3 mt-1' />
+                    <div>
+                      <h4 className='font-medium text-gray-900'>Abuja</h4>
+                      <p className='text-gray-600 mt-1'>
+                        Shop 12, Nottingham Gate Plaza, Maitama Road, FCT Abuja,
+                        Nigeria
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Business Hours */}
+            <div className='flex items-center justify-center p-3 mt-2 bg-gray-50 rounded-lg text-gray-600 text-sm'>
+              <FaClock className='h-4 w-4 mr-2 text-primary' />
+              Business hours: Monday to Saturday, 8:00 AM - 6:00 PM
             </div>
           </div>
 
