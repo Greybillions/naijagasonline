@@ -6,6 +6,7 @@ import { supabase } from '@/config/supabaseClient.config';
 import { NigerianCities } from '@/constants';
 import { FaBuilding, FaClock, FaMapPin, FaPhone } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
+import Link from 'next/link';
 
 const Contact = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -129,7 +130,12 @@ const Contact = () => {
                 </div>
                 <div>
                   <div className='text-sm text-gray-500'>Phone</div>
-                  <div className='font-medium'>+234 906 563 5394</div>
+                  <Link
+                    href='tel:+2349065635394'
+                    className='font-medium text-blue-600 hover:underline'
+                  >
+                    +234 906 563 5394
+                  </Link>
                 </div>
               </div>
 
@@ -139,7 +145,12 @@ const Contact = () => {
                 </div>
                 <div>
                   <div className='text-sm text-gray-500'>Email</div>
-                  <div className='font-medium'>naijagasonline@gmail.com</div>
+                  <Link
+                    href='mailto:naijagasonline@gmail.com'
+                    className='font-medium text-blue-600 hover:underline'
+                  >
+                    naijagasonline@gmail.com
+                  </Link>
                 </div>
               </div>
             </div>
