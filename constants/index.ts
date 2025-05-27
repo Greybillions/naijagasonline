@@ -120,4 +120,6 @@ export const gasOptions = [
   { label: '12.5kg', price: 12200 },
   { label: '25kg', price: 25500 },
   { label: 'Bulk Purchase', price: 0 },
+  { label: 'Contact Customer Care', price: 0 },
+  { label: 'Other', price: 0 },
 ];
