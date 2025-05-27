@@ -247,21 +247,32 @@ const ShopPage = () => {
           </div>
         </form>
 
-        {/* Success Message */}
+        {/* Modal on success */}
         {success && (
-          <div className='bg-green-100 text-green-800 px-6 py-4 rounded-md shadow text-center mb-8'>
-            <p className='font-semibold text-lg'>
-              Order submitted successfully!
-            </p>
-            <p className='text-sm'>
-              Our Dispatch Rider will contact you shortly.
-            </p>
-            <Link
-              href='/'
-              className='underline text-primary font-medium mt-2 inline-block'
-            >
-              Go back to home
-            </Link>
+          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm'>
+            <div className='relative bg-white p-6 rounded-xl shadow-lg max-w-md w-full text-center'>
+              {/* Close Button */}
+              <button
+                onClick={() => setSuccess(false)}
+                className='absolute top-2 right-2 text-red-500 hover:text-gray-700 text-2xl font-bold'
+                aria-label='Close modal'
+              >
+                &times;
+              </button>
+
+              <h2 className='text-xl font-bold mb-4 text-green-700'>
+                Thank you for choosing Naija Gas Online
+              </h2>
+              <p className='text-base mb-6 text-gray-700'>
+                Our Customer Care shall contact you shortly.
+              </p>
+              <Link
+                href='/about/press'
+                className='inline-block bg-primary hover:bg-primary-hover text-white px-5 py-2 rounded-md text-sm font-medium transition'
+              >
+                Go to Blog Page
+              </Link>
+            </div>
           </div>
         )}
 

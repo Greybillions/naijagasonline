@@ -22,7 +22,7 @@ const LeadershipPage = () => {
   ];
 
   const partners = [
-    { name: 'Bereeth Energy LTD', location: 'Lagos State' },
+    { name: 'Bereeth Energies & Investment LTD', location: 'Lagos State' },
     { name: 'BNL Services', location: 'Port Harcourt' },
   ];
 
