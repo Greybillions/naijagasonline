@@ -10,13 +10,13 @@ const LeadershipPage = () => {
     {
       name: 'Onipede Olamide J.',
       title: 'CEO',
-      image: '/team/mide.webp',
+      image: '/team/olamide.jpg',
       bio: 'Dr. Olamide leads the team with a bold vision to revolutionize gas delivery in Nigeria through smart technology and people-first strategies.',
     },
     {
       name: 'Tommy Uba Kobindi',
       title: 'Chief Operations Officer',
-      image: '/team/grey.webp',
+      image: '/team/tommy.jpg',
       bio: 'With over a decade of experience in logistics, Tommy ensures deliveries are fast, safe, and reliable nationwide.',
     },
   ];
