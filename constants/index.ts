@@ -35,7 +35,7 @@ export const footerLinks = {
   about: [
     { label: 'Company', href: '/about/company' },
     { label: 'Leadership', href: '/about/leadership' },
-    { label: 'Press', href: '/about/press' },
+    // { label: 'Press', href: '/about/press' },
     { label: 'Careers', href: '/about/careers' },
   ],
 };
