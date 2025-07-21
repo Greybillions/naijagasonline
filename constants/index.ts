@@ -26,7 +26,7 @@ export const servicePoints = [
   {
     title: 'Online Sales/Marketing',
     description:
-      'We sell oil and gas products from within Nigeria to Nigerians and to the world at large.',
+      'We sell oil and gas products from within Nigeria to Nigerians and to the world at l  arge.',
   },
 ];
 
