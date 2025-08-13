@@ -13,8 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const ogImageUrl =
-  'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/ogimg/Screenshot%202025-08-13%20174042.png'; // must be in /public
+const ogImageUrl = 'https://naijagasonline.com.ng/og-image.png'; // must be in /public
 
 export const metadata: Metadata = {
   title: 'NaijaGasOnline | Nigeria’s No.1 Oil & Gas Marketplace',
@@ -29,14 +28,16 @@ export const metadata: Metadata = {
     'digital gas store',
     'LPG Nigeria',
   ],
-  authors: [{ name: 'NaijaGasOnline Team', url: 'https://naijagasonline.com' }],
+  authors: [
+    { name: 'NaijaGasOnline Team', url: 'https://naijagasonline.com.ng' },
+  ],
   creator: 'NaijaGasOnline',
-  metadataBase: new URL('https://naijagasonline.com'),
+  metadataBase: new URL('https://naijagasonline.com.ng'),
   openGraph: {
     title: 'NaijaGasOnline | Digital Gas Marketplace',
     description:
       'Shop gas cylinders, accessories, and more. Safe and fast delivery across Nigeria.',
-    url: 'https://naijagasonline.com',
+    url: 'https://naijagasonline.com.ng',
     siteName: 'NaijaGasOnline',
     images: [
       {
