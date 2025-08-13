@@ -13,7 +13,8 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const ogImageUrl = 'https://naijagasonline.com/og-image.png'; // must be in /public
+const ogImageUrl =
+  'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/ogimg/Screenshot%202025-08-13%20174042.png'; // must be in /public
 
 export const metadata: Metadata = {
   title: 'NaijaGasOnline | Nigeria’s No.1 Oil & Gas Marketplace',
