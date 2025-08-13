@@ -53,7 +53,7 @@ export const metadata: Metadata = {
       'Nigeria No.1 Online Gas Marketplace. NaijaGasOnline is Nigeria&apos first digital marketplace for oil and gas products.',
     creator: '@naijagasonline', // update with your actual Twitter handle if you have
     images: [
-      'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/ogimg/Screenshot%202025-08-13%20174042.png',
+      'https://rqtzkqkdegwmnmkeyzjs.supabase.co/storage/v1/object/public/ogimg/Screenshot%202025-08-13%20174042.webp',
     ],
   },
   icons: {
