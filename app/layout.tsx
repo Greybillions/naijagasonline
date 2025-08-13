@@ -13,8 +13,6 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const ogImageUrl = 'https://naijagasonline.com.ng/og-image.jpg'; // must be in /public
-
 export const metadata: Metadata = {
   title: 'NaijaGasOnline | Nigeria’s No.1 Oil & Gas Marketplace',
   description:
@@ -41,7 +39,7 @@ export const metadata: Metadata = {
     siteName: 'NaijaGasOnline',
     images: [
       {
-        url: ogImageUrl,
+        url: 'https://naijagasonline.com.ng/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'NaijaGasOnline - Gas Delivery in Nigeria',
@@ -56,7 +54,7 @@ export const metadata: Metadata = {
     description:
       'Nigeria No.1 Online Gas Marketplace. NaijaGasOnline is Nigeria’s first digital marketplace for oil and gas products.',
     creator: '@naijagasonline', // update with your actual Twitter handle
-    images: [ogImageUrl],
+    images: ['https://naijagasonline.com.ng/og-image.jpg'],
   },
   icons: {
     icon: '/favicon.ico',
