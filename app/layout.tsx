@@ -37,14 +37,7 @@ export const metadata: Metadata = {
       'Shop gas cylinders, accessories, and more. Safe and fast delivery across Nigeria.',
     url: 'https://naijagasonline.com.ng',
     siteName: 'NaijaGasOnline',
-    images: [
-      {
-        url: 'https://naijagasonline.com.ng/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'NaijaGasOnline - Gas Delivery in Nigeria',
-      },
-    ],
+
     locale: 'en_NG',
     type: 'website',
   },
@@ -54,7 +47,6 @@ export const metadata: Metadata = {
     description:
       'Nigeria No.1 Online Gas Marketplace. NaijaGasOnline is Nigeria’s first digital marketplace for oil and gas products.',
     creator: '@naijagasonline', // update with your actual Twitter handle
-    images: ['https://naijagasonline.com.ng/og-image.jpg'],
   },
   icons: {
     icon: '/favicon.ico',

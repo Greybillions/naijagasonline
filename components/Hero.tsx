@@ -38,7 +38,7 @@ const Hero = () => {
       {/* Background Image */}
       <Image
         src={images.bgImg}
-        alt='Background'
+        alt='hero'
         fill
         priority
         className='object-cover z-0'
