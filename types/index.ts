@@ -5,6 +5,14 @@ export type Product = {
   title: string;
   price: number;
   image?: string;
+  subtitle?: string;
+  description?: string;
+  rating?: number;
+  kg?: string;
+  phone?: string;
+  state?: string;
+  city?: string;
+  seller_name?: string;
 };
 
 export type User = {
