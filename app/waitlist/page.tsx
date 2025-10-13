@@ -27,14 +27,8 @@ export default function WaitlistPage() {
 
     if (error) {
       const err = error as PostgrestError;
-      console.error('[Waitlist upsert error]', {
-        message: err.message,
-        details: err.details,
-        hint: err.hint,
-        code: err.code,
-      });
+      console.error('[Waitlist upsert error]', err);
 
-      // Fallback: check-then-insert
       const { data: existing, error: selErr } = await supabase
         .from('waitlist')
         .select('email')
@@ -42,9 +36,8 @@ export default function WaitlistPage() {
         .maybeSingle();
 
       if (selErr) {
-        const sel = selErr as PostgrestError;
         setStatus('error');
-        setMessage(sel.message || 'Could not save email. Try again.');
+        setMessage(selErr.message || 'Could not save email. Try again.');
         return;
       }
 
@@ -53,9 +46,8 @@ export default function WaitlistPage() {
           .from('waitlist')
           .insert({ email });
         if (insErr) {
-          const ins = insErr as PostgrestError;
           setStatus('error');
-          setMessage(ins.message || 'Could not save email. Try again.');
+          setMessage(insErr.message || 'Could not save email. Try again.');
           return;
         }
       }
@@ -67,28 +59,15 @@ export default function WaitlistPage() {
   }
 
   return (
-    <div className='min-h-dvh px-6 bg-gradient-to-b from-[#0b5037] via-[#0a6848] to-[#093c2b] text-white'>
-      <div className='absolute inset-0 -z-10 overflow-hidden'>
-        {/* Subtle green ambience */}
-        <motion.div
-          className='absolute -top-24 -left-24 h-72 w-72 rounded-full bg-[#22c55e]/20 blur-3xl'
-          animate={{ y: [0, 10, 0], x: [0, -10, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className='absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#10b981]/20 blur-3xl'
-          animate={{ y: [0, -12, 0], x: [0, 12, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <div
-          aria-hidden
-          className='pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px] opacity-30'
-        />
-      </div>
+    <div className='min-h-dvh px-6 bg-gradient-to-b from-[#020084] via-[#0400b0] to-[#0800e0] text-white relative overflow-hidden'>
+      <div
+        aria-hidden
+        className='pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:16px_16px] opacity-30'
+      />
 
       <main className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
         <section className='flex min-h-dvh flex-col items-center justify-center py-12'>
-          <div className='grid w-full items-center gap-10 md:gap-30  lg:grid-cols-2'>
+          <div className='grid w-full items-center gap-10 md:gap-30 lg:grid-cols-2'>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -136,7 +115,7 @@ export default function WaitlistPage() {
                     whileHover={{ y: -1 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={status === 'loading'}
-                    className='inline-flex h-12 items-center justify-center whitespace-nowrap rounded-2xl bg-white px-6 font-medium text-[#005b3d] shadow-lg shadow-black/20 disabled:opacity-70'
+                    className='inline-flex h-12 items-center justify-center whitespace-nowrap rounded-2xl bg-white px-6 font-medium text-[#020084] shadow-lg shadow-black/20 disabled:opacity-70'
                     type='submit'
                     aria-live='polite'
                   >
@@ -171,9 +150,20 @@ export default function WaitlistPage() {
                   )}
                 </AnimatePresence>
               </form>
+
+              {/* Subscribers Corner Teaser */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ delay: 0.4, duration: 1 }}
+                className='mt-6 text-sm italic text-white/70'
+              >
+                ✨ Subscribers Corner coming soon...
+              </motion.p>
             </motion.div>
 
-            {/* Preview card (glass + green gradient) */}
+            {/* Preview card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -185,8 +175,8 @@ export default function WaitlistPage() {
               <div className='relative rounded-3xl border border-white/15 bg-white/10 p-6 shadow-2xl backdrop-blur-xl'>
                 <div className='mb-4 flex items-center justify-between'>
                   <div className='flex items-center gap-2'>
-                    <span className='inline-block h-2.5 w-2.5 rounded-full bg-[#006f47]' />
-                    <span className='inline-block h-2.5 w-2.5 rounded-full bg-[#005b3d]' />
+                    <span className='inline-block h-2.5 w-2.5 rounded-full bg-[#020084]' />
+                    <span className='inline-block h-2.5 w-2.5 rounded-full bg-[#0400b0]' />
                   </div>
                   <span className='text-xs text-white/70'>preview</span>
                 </div>
