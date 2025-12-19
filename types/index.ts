@@ -83,3 +83,10 @@ export type CartOrder = {
   created_at?: string;
   status: string;
 };
+
+export type GasPrice = {
+  id: number;
+  kg: string;
+  amount: number;
+  created_at: string;
+};

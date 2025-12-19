@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 import './globals.css';
 import { CartProvider } from '@/contexts/CartContext';
 
@@ -64,6 +65,24 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CartProvider>{children}</CartProvider>
+        <Toaster
+          position='top-right'
+          toastOptions={{
+            duration: 5000,
+            style: {
+              background: '#111827', // slate-900
+              color: '#fff',
+              borderRadius: '12px',
+              fontSize: '14px',
+            },
+            success: {
+              iconTheme: {
+                primary: '#f97316', // orange-500
+                secondary: '#fff',
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

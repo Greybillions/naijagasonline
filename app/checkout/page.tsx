@@ -1,60 +1,78 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCart } from '@/contexts/CartContext';
 import Link from 'next/link';
-import FlutterwavePayment from '@/components/FlutterwaveButton';
+import toast from 'react-hot-toast';
 import { supabase } from '@/config/supabaseClient.config';
 
 const CheckoutPage = () => {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
+
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
   const [deliveryMethod, setDeliveryMethod] = useState('');
-  const [paymentMode, setPaymentMode] = useState('');
-
-  const txRef = useMemo(() => `naijagas-${Date.now()}`, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 700);
+    const timer = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSuccessfulPayment = async (txRef: string) => {
-    const product = cart.map((item) => ({
+  const placeOrder = async () => {
+    if (!name || !address || !phone || !deliveryMethod) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    if (cart.length === 0) {
+      toast.error('Your cart is empty');
+      return;
+    }
+
+    setSubmitting(true);
+
+    const products = cart.map((item) => ({
       name: item.title,
-      kg: item.kg || '',
+      kg: item.kg ?? '',
       price: item.price,
       quantity: item.quantity,
       total: item.price * item.quantity,
     }));
+
+    const txRef = `NG-COD-${Date.now()}`;
 
     const { error } = await supabase.from('cart_order').insert([
       {
         name,
         phonenumber: phone,
         address,
-        product,
+        product: products,
         tx_ref: txRef,
         delivery_method: deliveryMethod,
-        payment_mode: paymentMode,
+        payment_mode: 'payment_on_delivery',
+        status: 'pending',
       },
     ]);
 
     if (error) {
-      console.error('Supabase insert failed:', error.message);
-      alert(
-        'Something went wrong saving your order. Please try again or contact support.'
-      );
-    } else {
-      console.log('✅ Order saved with tx_ref:', txRef);
+      console.error(error);
+      toast.error('Failed to place order. Please try again.');
+      setSubmitting(false);
+      return;
     }
+
+    toast.success('✅ Order placed successfully!');
+    clearCart();
+
+    setSubmitting(false);
   };
 
   return (
@@ -67,142 +85,100 @@ const CheckoutPage = () => {
         </h1>
 
         {loading ? (
-          <div className='flex flex-col justify-center items-center mt-20'>
-            <svg
-              className='animate-spin h-12 w-12 text-green-500 mb-4'
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-            >
-              <circle
-                className='opacity-25'
-                cx='12'
-                cy='12'
-                r='10'
-                stroke='currentColor'
-                strokeWidth='4'
-              ></circle>
-              <path
-                className='opacity-75'
-                fill='currentColor'
-                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'
-              ></path>
-            </svg>
-            <p className='text-gray-700 text-lg'>Loading order details...</p>
+          <div className='flex flex-col items-center mt-20'>
+            <div className='h-12 w-12 animate-spin rounded-full border-4 border-orange-500 border-t-transparent mb-4' />
+            <p className='text-gray-700'>Loading order details…</p>
           </div>
+        ) : cart.length === 0 ? (
+          <p className='text-center text-gray-600'>
+            Your cart is empty.{' '}
+            <Link href='/' className='text-orange-600 font-semibold'>
+              Go back to shopping
+            </Link>
+          </p>
         ) : (
-          <>
-            {cart.length === 0 ? (
-              <p className='text-center text-gray-600'>
-                Your cart is empty.{' '}
-                <Link href='/' className='text-primary font-semibold'>
-                  Go back to shopping
-                </Link>
-              </p>
-            ) : (
-              <div className='space-y-6'>
-                {/* Cart Summary */}
-                <div className='bg-white p-6 rounded-lg shadow'>
-                  <h2 className='text-2xl font-semibold mb-4'>Order Summary</h2>
-                  <div className='divide-y divide-gray-200'>
-                    {cart.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className='flex justify-between items-center py-4'
-                      >
-                        <div className='flex items-start gap-2'>
-                          <span className='text-lg font-bold text-gray-700'>
-                            {index + 1}.
-                          </span>
-                          <div className='flex flex-col'>
-                            <span className='font-medium text-gray-800'>
-                              {item.title} x {item.quantity}
-                            </span>
-                            <span className='text-sm text-gray-500'>
-                              ₦{(item.price * item.quantity).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className='flex justify-between mt-6 pt-4 border-t'>
-                    <span className='font-semibold text-gray-700'>Total</span>
-                    <span className='font-bold text-green-600 text-xl'>
-                      ₦{total.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
+          <div className='space-y-6'>
+            {/* Order Summary */}
+            <div className='bg-white p-6 rounded-lg shadow'>
+              <h2 className='text-2xl font-semibold mb-4'>Order Summary</h2>
 
-                {/* User Info & Payment */}
-                <div className='bg-white p-6 rounded-lg shadow'>
-                  <h2 className='text-2xl font-semibold mb-4'>Customer Info</h2>
-                  <div className='grid gap-4'>
-                    <input
-                      type='text'
-                      placeholder='Full Name'
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    />
-                    <textarea
-                      placeholder='Home Address'
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    />
-                    <input
-                      type='number'
-                      placeholder='Phone Number'
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    />
-                    <select
-                      value={deliveryMethod}
-                      onChange={(e) => setDeliveryMethod(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    >
-                      <option value=''>Select Delivery Option</option>
-                      <option value='doorstep'>Doorstep Delivery</option>
-                      <option value='pickup'>Pickup</option>
-                    </select>
-                    <select
-                      value={paymentMode}
-                      onChange={(e) => setPaymentMode(e.target.value)}
-                      className='border rounded p-3 w-full'
-                      required
-                    >
-                      <option value=''>Select Payment Mode</option>
-                      <option value='one-time'>One time Payment</option>
-                      <option value='easy-buy'>Easy Buy</option>
-                    </select>
-                  </div>
-
-                  {name && address && phone && paymentMode ? (
-                    <div className='mt-6'>
-                      <FlutterwavePayment
-                        amount={total}
-                        name={name}
-                        phone={phone}
-                        txRef={txRef}
-                        paymentMode={paymentMode}
-                        onSuccess={(ref) => handleSuccessfulPayment(ref)}
-                      />
+              <div className='divide-y'>
+                {cart.map((item, index) => (
+                  <div key={item.id} className='flex justify-between py-4'>
+                    <div>
+                      <p className='font-medium'>
+                        {index + 1}. {item.title} × {item.quantity}
+                      </p>
+                      <p className='text-sm text-gray-500'>
+                        ₦{(item.price * item.quantity).toLocaleString()}
+                      </p>
                     </div>
-                  ) : (
-                    <p className='text-sm text-gray-500 mt-4'>
-                      Fill in your details to continue to payment.
-                    </p>
-                  )}
+                  </div>
+                ))}
+              </div>
+
+              <div className='flex justify-between mt-6 pt-4 border-t'>
+                <span className='font-semibold'>Total</span>
+                <span className='text-xl font-bold text-orange-600'>
+                  ₦{total.toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            {/* Customer Info */}
+            <div className='bg-white p-6 rounded-lg shadow'>
+              <h2 className='text-2xl font-semibold mb-4'>
+                Customer Information
+              </h2>
+
+              <div className='grid gap-4'>
+                <input
+                  placeholder='Full Name'
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className='border rounded p-3'
+                />
+
+                <textarea
+                  placeholder='Delivery Address'
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  className='border rounded p-3'
+                />
+
+                <input
+                  placeholder='Phone Number'
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className='border rounded p-3'
+                />
+
+                <select
+                  value={deliveryMethod}
+                  onChange={(e) => setDeliveryMethod(e.target.value)}
+                  className='border rounded p-3'
+                >
+                  <option value=''>Select Delivery Option</option>
+                  <option value='door_delivery'>Door Delivery</option>
+                  <option value='pickup'>Pickup</option>
+                </select>
+
+                {/* Payment Mode (locked) */}
+                <div className='rounded-lg border bg-gray-50 p-3 text-sm text-gray-700'>
+                  💵 Payment Method:{' '}
+                  <span className='font-medium'>Payment on Delivery</span>
                 </div>
               </div>
-            )}
-          </>
+
+              <button
+                onClick={placeOrder}
+                disabled={submitting}
+                className='mt-6 w-full rounded-xl bg-orange-600 px-6 py-3 text-white font-medium hover:bg-orange-700 disabled:opacity-60'
+              >
+                {submitting ? 'Placing Order…' : 'Place Order'}
+              </button>
+            </div>
+          </div>
         )}
       </main>
 
